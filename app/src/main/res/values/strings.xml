@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Iris Security</string>
+    <string name="facebook_app_id">1699701790282298</string>
+    <string name="message_splash">The Personal Smart Security Button</string>
+    <string name="iris">Iris</string>
+    <string name="contentImages" />
+</resources>
