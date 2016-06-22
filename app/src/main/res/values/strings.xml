@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">Iris Security</string>
+    <string name="app_name">Guardify</string>
     <string name="facebook_app_id">1699701790282298</string>
     <string name="message_splash">The Personal Smart Security Button</string>
     <string name="iris">Iris</string>
     <string name="contentImages" />
+    <string name="validating">Validating</string>
     <string name="connection_issues">Connection issues</string>
     <string name="cannot_access_network_check">You can\'t access the network. Check your Internet connection.</string>
     <string name="review_settings">Review settings</string>
@@ -12,11 +13,12 @@
     <string name="enable">Enable</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="password_enter_reset">Password / Enter to change it</string>
     <string name="login">Login</string>
     <string name="login_with_facebook">Log in with Facebook</string>
     <string name="create_account">Create an Account</string>
     <string name="must_complete_fields">You must complete the required fields</string>
-    <string name="enter_valid_email">Please a valid email</string>
+    <string name="enter_valid_email">Please enter a valid email</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -26,4 +28,30 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="register">Register</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="language">Language</string>
+    <string name="password_different">The passwords are different</string>
+    <string name="looks_like_connection_problems">Looks like you have a connection problem. Check your Internet connection.</string>
+    <string name="connect">Connect</string>
+    <string name="profile">Profile</string>
+    <string name="contact">Contact</string>
+    <string name="signout">Sign out</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="save">Save</string>
+    <string name="gender">Gender</string>
+    <string name="birthday">Birthday</string>
+    <string name="select_your_birth">Select your birthday</string>
+    <string name="country">Country</string>
+    <string name="select_country">Select country</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="searching_devices">Searching devices ...</string>
+    <string name="bluetooth_off">Bluetooth disabled</string>
+    <string name="no_devices_around">There are no \n devices around</string>
+    <string name="search_again">Search again</string>
+    <string name="connecting">Connecting</string>
+    <string name="cannot_connect_device">Can not connect to device</string>
 </resources>

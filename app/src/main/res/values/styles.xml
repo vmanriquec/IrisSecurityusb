@@ -8,13 +8,31 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="customSpinner" parent="AppTheme">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
+
     <style name="btn_facebook" parent="android:Widget">
         <item name="android:background">@drawable/selector_btn_facebook</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="btn_primary" parent="android:Widget">
+        <item name="android:background">@drawable/selector_btn_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="btn_gps_principal" parent="android:Widget">
+        <item name="android:background">@drawable/selector_btn_gps_principal</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 

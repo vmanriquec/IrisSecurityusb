@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/state_btn_gps_principal_press" android:state_pressed="true" />
+    <!-- Aqui se coloca la imagen de Boton Pulsado Activo -->
+
+    <item android:drawable="@drawable/state_btn_gps_principal_press" android:state_focused="true" />
+    <!-- Imagen de Boton Pulsado Activo -->
+
+    <item android:drawable="@drawable/state_btn_gps_principal" />
+    <!-- Imagen de Boton Inactivo -->
+
+</selector>

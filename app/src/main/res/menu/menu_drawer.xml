@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_connect"
+            android:icon="@drawable/ic_bluetooth_connect_black_24dp"
+            android:title="@string/connect" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account_card_details_black_24dp"
+            android:title="@string/profile" />
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_email_black_24dp"
+            android:title="@string/contact" />
+    </group>
+
+    <group
+        android:id="@+id/group2">
+        <item
+            android:id="@+id/nav_signout"
+            android:icon="@drawable/ic_logout_black_24dp"
+            android:title="@string/signout" />
+    </group>
+
+</menu>

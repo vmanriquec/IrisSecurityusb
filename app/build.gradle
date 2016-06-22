@@ -37,4 +37,6 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.13.1'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.mukesh:countrypicker:1.1.4'
+    compile 'com.loopj.android:android-async-http:1.4.9'
 }
