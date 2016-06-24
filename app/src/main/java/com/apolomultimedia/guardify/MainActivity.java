@@ -26,6 +26,7 @@ import com.apolomultimedia.guardify.fragment.HomeFragment;
 import com.apolomultimedia.guardify.fragment.ProfileFragment;
 import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
+import com.apolomultimedia.guardify.service.BlueetoothConnectionService;
 import com.apolomultimedia.guardify.service.BluetoothService;
 import com.apolomultimedia.guardify.util.Constantes;
 import com.apolomultimedia.guardify.util.Main;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         userPrefs = new UserPrefs(getApplicationContext());
         bluePrefs = new BluePrefs(getApplicationContext());
 
-        Intent i = new Intent(MainActivity.this, BluetoothService.class);
+        Intent i = new Intent(MainActivity.this, BlueetoothConnectionService.class);
         Log.i(TAG, "MAC?: " + bluePrefs.getKeyPairedMaccAddress());
         if (!bluePrefs.getKeyPairedMaccAddress().equals("")) {
             Log.i(TAG, "sendin mac...");

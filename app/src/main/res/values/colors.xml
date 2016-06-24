@@ -4,6 +4,8 @@
     <color name="colorPrimary">#49B3E1</color>
     <color name="colorPrimaryDark">#40aad7</color>
     <color name="colorAccent">#49B3E1</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
@@ -12,5 +14,6 @@
     <color name="bg_profile">#49B3E1</color>
     <color name="text_profile">#595959</color>
     <color name="hint_text_profile">#b99e9e9e</color>
+    <color name="bg_main_options">#49B4E2</color>
 
 </resources>

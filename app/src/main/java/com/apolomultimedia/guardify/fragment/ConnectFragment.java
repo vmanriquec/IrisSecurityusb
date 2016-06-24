@@ -26,6 +26,7 @@ import com.apolomultimedia.guardify.R;
 import com.apolomultimedia.guardify.adapter.DeviceListAdapter;
 import com.apolomultimedia.guardify.model.BluetoothDeviceModel;
 import com.apolomultimedia.guardify.preference.BluePrefs;
+import com.apolomultimedia.guardify.service.BlueetoothConnectionService;
 import com.apolomultimedia.guardify.service.BluetoothService;
 import com.apolomultimedia.guardify.util.RecyclerViewOnItemClickListener;
 import com.apolomultimedia.guardify.util.ToastUtil;
@@ -182,7 +183,7 @@ public class ConnectFragment extends Fragment {
         BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(device.getMACAddress());
         ToastUtil.shortToast(getActivity(), getActivity().getString(R.string.connecting));
 
-        Intent intent = new Intent(getActivity(), BluetoothService.class);
+        Intent intent = new Intent(getActivity(), BlueetoothConnectionService.class);
         intent.putExtra("mac", bluetoothDevice.getAddress());
         getActivity().startService(intent);
 

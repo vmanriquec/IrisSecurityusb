@@ -54,4 +54,14 @@
     <string name="search_again">Search again</string>
     <string name="connecting">Connecting</string>
     <string name="cannot_connect_device">Can not connect to device</string>
+    <string name="instructions">Instructions</string>
+    <string name="facebook">Facebook</string>
+    <string name="contacts">Contacts</string>
+    <string name="map">Map</string>
+    <string name="one_click">1 click</string>
+    <string name="share_gps_tracking_first_contact">Share GPS tracking with \n the first contact</string>
+    <string name="two_click">2 clicks</string>
+    <string name="share_gps_tracking_contacts_and_facebook">Share GPS tracking with all \n contacts, and post to Facebook</string>
+    <string name="hold_secs">Hold ( 4 sec )</string>
+    <string name="cancel_tracking">Cancel tracking</string>
 </resources>

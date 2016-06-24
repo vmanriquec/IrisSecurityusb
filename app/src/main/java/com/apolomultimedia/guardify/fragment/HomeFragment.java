@@ -19,15 +19,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apolomultimedia.guardify.R;
+import com.apolomultimedia.guardify.TrackGPSActivity;
 import com.apolomultimedia.guardify.model.BluetoothDeviceModel;
 import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
+import com.apolomultimedia.guardify.util.AlertDialogs;
 import com.apolomultimedia.guardify.util.Constantes;
+import com.apolomultimedia.guardify.util.Main;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class HomeFragment extends Fragment {
 
@@ -63,6 +67,17 @@ public class HomeFragment extends Fragment {
 
         return view;
 
+    }
+
+    @OnClick(R.id.iv_gps)
+    void openGPS() {
+        if (Main.hasGPSEnabled(getActivity())) {
+            getActivity().startActivity(new Intent(getActivity(), TrackGPSActivity.class));
+            getActivity().finish();
+
+        } else {
+            AlertDialogs.buildAlertNoGPS(getActivity());
+        }
     }
 
     @Override

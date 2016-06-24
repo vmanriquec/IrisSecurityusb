@@ -24,6 +24,9 @@ public class UserPrefs {
     private static final String KEY_LOAD_FOTO_FB = "load_foto_fb";
     private static final String KEY_ESTADO = "estado";
 
+    private static final String KEY_LATITUD = "latitud";
+    private static final String KEY_LONGITUD = "longitud";
+
     private static final String KEY_SOCKET_CONNECTED = "socket_connected";
     private static final String KEY_SOCKET_ID = "socket_id";
 
@@ -33,6 +36,22 @@ public class UserPrefs {
 
     public void reset() {
         setKeyLogged(false);
+    }
+
+    public void setKeyLatitud(String value) {
+        prefs.put(KEY_LATITUD, value);
+    }
+
+    public String getKeyLatitud() {
+        return prefs.getString(KEY_LATITUD);
+    }
+
+    public void setKeyLongitud(String value) {
+        prefs.put(KEY_LONGITUD, value);
+    }
+
+    public String getKeyLongitud() {
+        return prefs.getString(KEY_LONGITUD);
     }
 
     public void setKeyEmail(String value) {
