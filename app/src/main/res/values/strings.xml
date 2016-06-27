@@ -60,6 +60,7 @@
     <string name="map">Map</string>
     <string name="one_click">1 click</string>
     <string name="share_gps_tracking_first_contact">Share GPS tracking with \n the first contact</string>
+    <string name="share_gps_tracking_contacts_selected">Share GPS tracking with \n all the selected contacts</string>
     <string name="two_click">2 clicks</string>
     <string name="share_gps_tracking_contacts_and_facebook">Share GPS tracking with all \n contacts, and post to Facebook</string>
     <string name="hold_secs">Hold ( 4 sec )</string>

@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import com.apolomultimedia.guardify.MainActivity;
 import com.apolomultimedia.guardify.R;
 import com.apolomultimedia.guardify.api.ApiSingleton;
 import com.apolomultimedia.guardify.api.model.StatusModel;
+import com.apolomultimedia.guardify.api.model.UploadPhotoModel;
 import com.apolomultimedia.guardify.api.model.UserModel;
 import com.apolomultimedia.guardify.app.GuardifyApplication;
 import com.apolomultimedia.guardify.custom.ui.CircleTransform;
@@ -42,6 +44,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -111,6 +114,9 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
+
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         userPrefs = new UserPrefs(getActivity());
         loadUser();
@@ -201,6 +207,8 @@ public class ProfileFragment extends Fragment {
             hashMap.put("birthday", birthday);
             hashMap.put("country", country);
 
+            initLoading(getActivity().getResources().getString(R.string.updating));
+
             ApiSingleton.getApiService().doUpdateProfile(hashMap).enqueue(new Callback<UserModel>() {
                 @Override
                 public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -238,18 +246,22 @@ public class ProfileFragment extends Fragment {
 
         RequestBody descriptionRB = RequestBody.create(MediaType.parse("multipart/form-data"), userPrefs.getKeyIdUsuario());
 
-        ApiSingleton.getApiService().doUpdatePhoto(descriptionRB, body).enqueue(new Callback<StatusModel>() {
+        ApiSingleton.getApiService().doUpdatePhoto(descriptionRB, body).enqueue(new Callback<UploadPhotoModel>() {
             @Override
-            public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
+            public void onResponse(Call<UploadPhotoModel> call, Response<UploadPhotoModel> response) {
                 Log.i(TAG, "onResponse update photo");
                 finishLoading();
                 saveNewUserData(true);
+                if (response.body().getFile_name() != null) {
+                    Log.i(TAG, "file_name: " + response.body().getFile_name());
+                    userPrefs.setKeyFoto(response.body().getFile_name());
+                }
                 URI_FOTO = "";
                 et_password.setText("");
             }
 
             @Override
-            public void onFailure(Call<StatusModel> call, Throwable t) {
+            public void onFailure(Call<UploadPhotoModel> call, Throwable t) {
                 Log.i(TAG, "onFailure update photo");
                 finishLoading();
                 saveNewUserData(false);
@@ -261,6 +273,26 @@ public class ProfileFragment extends Fragment {
     }
 
     private void saveNewUserData(Boolean foto) {
+        if (foto) {
+            userPrefs.setKeyLoadFotoFb(false);
+        }
+
+        String URL_FOTO = Constantes.IMAGES_PATH + userPrefs.getKeyFoto();
+        Picasso.with(getActivity()).load(URL_FOTO).transform(new CircleTransform()).into(iv_foto);
+
+        userPrefs.setKeyNombre(et_firstname.getText().toString().trim());
+        userPrefs.setKeyApellido(et_lastname.getText().toString().trim());
+        String gender = "M";
+        if (radio_female.isChecked()) {
+            gender = "F";
+        }
+
+        userPrefs.setKeyGenero(gender);
+        userPrefs.setKeyCiudad(tv_country.getText().toString().trim());
+        userPrefs.setKeyOnomastico(tv_birthday.getText().toString().trim());
+
+        loadUser();
+        ((MainActivity) getActivity()).loadUser();
 
     }
 
@@ -304,16 +336,19 @@ public class ProfileFragment extends Fragment {
         et_firstname.setText(userPrefs.getKeyNombre());
         et_lastname.setText(userPrefs.getKeyApellido());
 
-        if (userPrefs.getKeyGenero().equals("male") || userPrefs.getKeyGenero().equals("")) {
+        if (userPrefs.getKeyGenero().equals("male") || userPrefs.getKeyGenero().equals("") ||
+                userPrefs.getKeyGenero().equals("M")) {
             checkRadioGender("M");
         } else {
             checkRadioGender("F");
         }
 
+        tv_birthday.setText(userPrefs.getKeyOnomastico());
+        tv_country.setText(userPrefs.getKeyCiudad());
+
     }
 
     private void checkRadioGender(String gender) {
-        Log.i("Profile", "gender: " + gender);
         if (gender.equals("M")) {
             radio_female.setChecked(false);
             radio_male.setChecked(true);
@@ -327,14 +362,6 @@ public class ProfileFragment extends Fragment {
     public void onAttach(Context context) {
         myContext = (MainActivity) context;
         super.onAttach(context);
-    }
-
-    public byte[] getImagenComprimida(Bitmap bitmap) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        Bitmap bm = bitmap;
-        bm.compress(Bitmap.CompressFormat.JPEG, 75, bos); // Compresion
-        byte[] data = bos.toByteArray();
-        return data;
     }
 
     private void initLoading(String msg) {

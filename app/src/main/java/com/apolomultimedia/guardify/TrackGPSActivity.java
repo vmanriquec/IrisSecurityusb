@@ -13,6 +13,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,12 +27,14 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.apolomultimedia.guardify.database.ContactDB;
 import com.apolomultimedia.guardify.fragment.track.gps.ContactsFragment;
 import com.apolomultimedia.guardify.fragment.track.gps.FacebookFragment;
 import com.apolomultimedia.guardify.fragment.track.gps.InstructionsFragment;
 import com.apolomultimedia.guardify.fragment.track.gps.MapFragment;
 import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
+import com.apolomultimedia.guardify.service.BluetoothService;
 import com.apolomultimedia.guardify.service.GeolocationService;
 import com.apolomultimedia.guardify.util.Constantes;
 import com.squareup.picasso.Picasso;
@@ -57,6 +60,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
 
     UserPrefs userPrefs;
     BluePrefs bluePrefs;
+    ContactDB contactDB;
 
     private int[] tabIcons = {R.drawable.ic_playlist_check_white_24dp,
             R.drawable.ic_google_maps_white_24dp, R.drawable.ic_contact_mail_white_24dp,
@@ -70,6 +74,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
 
         userPrefs = new UserPrefs(getApplicationContext());
         bluePrefs = new BluePrefs(getApplicationContext());
+        contactDB = new ContactDB(getApplicationContext());
 
         startService(new Intent(TrackGPSActivity.this, GeolocationService.class));
 
@@ -181,7 +186,49 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        triggerChangeFragment(id);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    private void triggerChangeFragment(int id) {
+        String action = "";
+        switch (id) {
+            case R.id.nav_connect:
+                action = "connect";
+                break;
+
+            case R.id.nav_profile:
+                action = "profile";
+                break;
+
+            case R.id.nav_contact:
+                action = "contact";
+                break;
+
+            case R.id.nav_signout:
+                signout();
+                break;
+        }
+
+        if (!action.equals("")) {
+            Intent i = new Intent(TrackGPSActivity.this, MainActivity.class);
+            i.putExtra("load", action);
+            startActivity(i);
+            finish();
+        }
+    }
+
+    private void signout() {
+        userPrefs.reset();
+        bluePrefs.reset();
+        contactDB.deleteRecords();
+        stopService(new Intent(TrackGPSActivity.this, BluetoothService.class));
+        startActivity(new Intent(TrackGPSActivity.this, LoginActivity.class));
+        finish();
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

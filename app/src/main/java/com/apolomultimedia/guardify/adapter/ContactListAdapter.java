@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,6 +45,17 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         }
         holder.getTv_string().setText(txt);
 
+        String selected = model.getSelected();
+        if (selected != null) {
+            if (selected.equals("1")) {
+                holder.getCb_selected().setChecked(true);
+            } else {
+                holder.getCb_selected().setChecked(false);
+            }
+        } else {
+            holder.getCb_selected().setChecked(false);
+        }
+
     }
 
     @Override
@@ -55,6 +67,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             implements View.OnClickListener {
 
         private TextView tv_name, tv_string;
+        private CheckBox cb_selected;
         private RelativeLayout rl_main;
 
         public ContactViewHolder(View itemView) {
@@ -62,6 +75,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             itemView.setOnClickListener(this);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
             tv_string = (TextView) itemView.findViewById(R.id.tv_string);
+            cb_selected = (CheckBox) itemView.findViewById(R.id.cb_selected);
+            cb_selected.setOnClickListener(this);
             rl_main = (RelativeLayout) itemView.findViewById(R.id.rl_main);
             rl_main.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -70,6 +85,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     return true;
                 }
             });
+        }
+
+        public CheckBox getCb_selected() {
+            return cb_selected;
         }
 
         public TextView getTv_name() {

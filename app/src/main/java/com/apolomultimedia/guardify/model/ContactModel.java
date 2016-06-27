@@ -3,7 +3,7 @@ package com.apolomultimedia.guardify.model;
 public class ContactModel {
 
     String _id;
-    String name, phone, email, cod;
+    String name, phone, email, cod, selected;
 
     public String get_id() {
         return _id;
@@ -43,5 +43,13 @@ public class ContactModel {
 
     public void setCod(String cod) {
         this.cod = cod;
+    }
+
+    public String getSelected() {
+        return selected;
+    }
+
+    public void setSelected(String selected) {
+        this.selected = selected;
     }
 }

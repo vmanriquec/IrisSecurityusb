@@ -69,13 +69,11 @@ public class MainActivity extends AppCompatActivity
         bluePrefs = new BluePrefs(getApplicationContext());
         contactDB = new ContactDB(getApplicationContext());
 
-        Intent i = new Intent(MainActivity.this, BlueetoothConnectionService.class);
-        Log.i(TAG, "MAC?: " + bluePrefs.getKeyPairedMaccAddress());
+        /*Intent i = new Intent(MainActivity.this, BlueetoothConnectionService.class);
         if (!bluePrefs.getKeyPairedMaccAddress().equals("")) {
-            Log.i(TAG, "sendin mac...");
             i.putExtra("mac", bluePrefs.getKeyPairedMaccAddress());
         }
-        startService(i);
+        startService(i);*/
 
         fragmentManager = getSupportFragmentManager();
 
@@ -92,11 +90,38 @@ public class MainActivity extends AppCompatActivity
         loadUser();
         unCheckFirstItem();
         checkEstadoRetrofitBg();
+        handleExtras();
 
+    }
+
+    private void handleExtras() {
+        String load = getIntent().getStringExtra("load");
+        if (load != null) {
+            Log.i(TAG, "load: " + load);
+            switch (load) {
+                case "normal":
+                    break;
+
+                case "connect:":
+                    triggerChangeFragment(R.id.nav_connect);
+                    break;
+
+                case "profile":
+                    triggerChangeFragment(R.id.nav_profile);
+                    break;
+
+                case "contact":
+                    triggerChangeFragment(R.id.nav_contact);
+                    break;
+
+            }
+        }
     }
 
     private void unCheckFirstItem() {
         navigationView.getMenu().getItem(0).setChecked(false);
+        navigationView.getMenu().getItem(1).setChecked(false);
+        navigationView.getMenu().getItem(2).setChecked(false);
         triggerChangeFragment(id_home_fragment);
     }
 
@@ -175,6 +200,9 @@ public class MainActivity extends AppCompatActivity
 
             case id_home_fragment:
                 fragment = new HomeFragment();
+                navigationView.getMenu().getItem(0).setChecked(false);
+                navigationView.getMenu().getItem(1).setChecked(false);
+                navigationView.getMenu().getItem(2).setChecked(false);
                 break;
         }
 

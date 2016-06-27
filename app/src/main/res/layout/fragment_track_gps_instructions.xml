@@ -24,7 +24,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:gravity="center"
-        android:text="@string/share_gps_tracking_first_contact"
+        android:text="@string/share_gps_tracking_contacts_selected"
         android:textColor="@color/text_profile"
         android:textSize="13sp" />
 

@@ -4,6 +4,7 @@ import com.apolomultimedia.guardify.api.model.CheckStatusModel;
 import com.apolomultimedia.guardify.api.model.ContactModel;
 import com.apolomultimedia.guardify.api.model.StatusModel;
 import com.apolomultimedia.guardify.api.model.UpdatePhotoModel;
+import com.apolomultimedia.guardify.api.model.UploadPhotoModel;
 import com.apolomultimedia.guardify.api.model.UserModel;
 import com.apolomultimedia.guardify.util.Constantes;
 import com.google.android.gms.common.api.Status;
@@ -40,8 +41,8 @@ public interface ApiService {
 
     @Multipart
     @POST(Constantes.UPDATE_PHOTO)
-    Call<StatusModel> doUpdatePhoto(@Part("idusuario") RequestBody idusuario,
-                                    @Part MultipartBody.Part file);
+    Call<UploadPhotoModel> doUpdatePhoto(@Part("idusuario") RequestBody idusuario,
+                                         @Part MultipartBody.Part file);
 
     @FormUrlEncoded
     @POST(Constantes.CHECK_STATUS)

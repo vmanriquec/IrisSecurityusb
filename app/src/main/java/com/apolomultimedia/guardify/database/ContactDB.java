@@ -14,13 +14,15 @@ public class ContactDB {
     public static final String CON_PHONE = "phone";
     public static final String CON_MAIL = "mail";
     public static final String CON_COD = "cod";
+    public static final String CON_SELECTED = "selected";
 
     public static final String CREATE_TABLE = " create table if not exists " + TABLE_NAME + " ("
             + CON_ID + " integer primary key autoincrement, "
             + CON_NAME + " text not null, "
             + CON_PHONE + " text not null, "
             + CON_MAIL + " text not null, "
-            + CON_COD + " text not null );";
+            + CON_COD + " text not null,"
+            + CON_SELECTED + " text not null default '0' );";
 
     public static final String DROP_TABLE = " DROP TABLE IF EXISTS " + TABLE_NAME;
 
@@ -40,7 +42,6 @@ public class ContactDB {
         contentValues.put(CON_COD, cod);
         db.insert(TABLE_NAME, null, contentValues);
         db.close();
-
     }
 
     public Cursor getContacts() {
@@ -73,6 +74,13 @@ public class ContactDB {
         contentValues.put(CON_MAIL, mail);
         contentValues.put(CON_COD, cod);
         db.update(TABLE_NAME, contentValues, " _id = ? ", new String[]{String.valueOf(_id)});
+        db.close();
+    }
+
+    public void updateContactSelected(int _id, String selected) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + CON_SELECTED + " = " + selected +  " WHERE "
+                + CON_ID + " = " + _id);
         db.close();
     }
 

@@ -193,6 +193,7 @@ public class ContactsFragment extends Fragment {
                 model.setPhone(contactsCursor.getString(2));
                 model.setEmail(contactsCursor.getString(3));
                 model.setCod(contactsCursor.getString(4));
+                model.setSelected(contactsCursor.getString(5));
 
                 list.add(model);
             }
@@ -200,13 +201,29 @@ public class ContactsFragment extends Fragment {
             rv_contacts.setAdapter(new ContactListAdapter(list, new RecyclerViewOnItemClickListener() {
                 @Override
                 public void onClick(View v, int position) {
-                    ContactModel model = list.get(position);
-                    String cod = model.getCod();
-                    if (cod.equals("1")) {
-                        loadModalPhone(true, Integer.valueOf(model.get_id()));
-                    } else {
-                        loadModalEmail(true, Integer.valueOf(model.get_id()));
+                    final ContactModel model = list.get(position);
+
+                    switch (v.getId()) {
+                        case R.id.rl_main:
+                            String cod = model.getCod();
+                            if (cod.equals("1")) {
+                                loadModalPhone(true, Integer.valueOf(model.get_id()));
+                            } else {
+                                loadModalEmail(true, Integer.valueOf(model.get_id()));
+                            }
+                            break;
+
+                        case R.id.cb_selected:
+                            String cambio = "1";
+                            if (model.getSelected().equals("1")) {
+                                cambio = "0";
+                            }
+                            contactDB.updateContactSelected(Integer.valueOf(model.get_id()), cambio);
+                            refreshRecyclerView();
+                            break;
+
                     }
+
                 }
 
                 @Override
