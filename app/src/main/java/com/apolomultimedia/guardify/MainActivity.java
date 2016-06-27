@@ -2,6 +2,7 @@ package com.apolomultimedia.guardify;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,12 +16,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apolomultimedia.guardify.api.ApiSingleton;
 import com.apolomultimedia.guardify.api.model.CheckStatusModel;
 import com.apolomultimedia.guardify.custom.ui.CircleTransform;
+import com.apolomultimedia.guardify.database.ContactDB;
 import com.apolomultimedia.guardify.fragment.ConnectFragment;
 import com.apolomultimedia.guardify.fragment.HomeFragment;
 import com.apolomultimedia.guardify.fragment.ProfileFragment;
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity
 
     UserPrefs userPrefs;
     BluePrefs bluePrefs;
+    ContactDB contactDB;
 
     NavigationView navigationView;
     DrawerLayout drawer;
@@ -63,6 +67,7 @@ public class MainActivity extends AppCompatActivity
 
         userPrefs = new UserPrefs(getApplicationContext());
         bluePrefs = new BluePrefs(getApplicationContext());
+        contactDB = new ContactDB(getApplicationContext());
 
         Intent i = new Intent(MainActivity.this, BlueetoothConnectionService.class);
         Log.i(TAG, "MAC?: " + bluePrefs.getKeyPairedMaccAddress());
@@ -100,7 +105,7 @@ public class MainActivity extends AppCompatActivity
         drawer.openDrawer(Gravity.LEFT);
     }
 
-    private void checkFirstItem() {
+    public void checkFirstItem() {
         navigationView.getMenu().getItem(0).setChecked(true);
         triggerChangeFragment(R.id.nav_connect);
     }
@@ -113,6 +118,14 @@ public class MainActivity extends AppCompatActivity
             URL_FOTO = "https://graph.facebook.com/" + userPrefs.getKeyIdFacebook() + "/picture?type=normal";
         }
         Picasso.with(MainActivity.this).load(URL_FOTO).transform(new CircleTransform()).into(iv_foto);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (iv_foto.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) iv_foto.getLayoutParams();
+                p.setMargins(0, 80, 0, 0);
+                iv_foto.requestLayout();
+            }
+        }
 
         TextView tv_names = (TextView) headerView.findViewById(R.id.tv_names);
         String names = userPrefs.getKeyNombre() + " " + userPrefs.getKeyApellido();
@@ -128,7 +141,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            // do nothing
         }
     }
 
@@ -181,6 +194,7 @@ public class MainActivity extends AppCompatActivity
     private void signout() {
         userPrefs.reset();
         bluePrefs.reset();
+        contactDB.deleteRecords();
         stopService(new Intent(MainActivity.this, BluetoothService.class));
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
@@ -247,4 +261,6 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = fragmentManager.findFragmentById(R.id.frame_container);
         fragment.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

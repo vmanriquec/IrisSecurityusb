@@ -42,7 +42,7 @@
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="@string/searching_devices"
-            android:textColor="@color/black"
+            android:textColor="@color/text_profile"
             android:textSize="15sp" />
 
     </LinearLayout>
@@ -86,13 +86,12 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="@string/no_devices_around"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textColor="@color/text_profile"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/btn_research"
             style="@style/btn_primary"
-            fontPath="fonts/MyriadPro-Bold.otf"
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_marginLeft="40dp"

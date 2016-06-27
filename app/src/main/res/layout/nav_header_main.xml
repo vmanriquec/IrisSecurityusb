@@ -15,17 +15,18 @@
 
     <ImageView
         android:id="@+id/iv_foto"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/width_photo_menu"
+        android:layout_height="@dimen/height_photo_menu"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/contentImages"
-        android:paddingTop="@dimen/nav_header_vertical_spacing" />
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/contentImages" />
 
     <TextView
         android:id="@+id/tv_names"
-        fontPath="fonts/MyriadPro-Semibold.otf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:gravity="center"
         android:paddingTop="10dp"
         android:text=".."

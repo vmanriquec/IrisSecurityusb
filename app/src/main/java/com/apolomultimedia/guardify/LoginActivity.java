@@ -3,9 +3,13 @@ package com.apolomultimedia.guardify;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,7 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apolomultimedia.guardify.api.ApiSingleton;
+import com.apolomultimedia.guardify.api.model.ContactItemModel;
 import com.apolomultimedia.guardify.api.model.UserModel;
+import com.apolomultimedia.guardify.database.ContactDB;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.util.Main;
 import com.apolomultimedia.guardify.util.ToastUtil;
@@ -31,6 +37,9 @@ import com.facebook.login.LoginResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -70,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private UserPrefs userPrefs;
     private ProgressDialog progressDialog;
+    private ContactDB contactDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +89,9 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         userPrefs = new UserPrefs(getApplicationContext());
+        contactDB = new ContactDB(getApplicationContext());
         loadUnderline();
+        getKeyHash();
 
     }
 
@@ -87,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     void login() {
 
         String email = et_email.getText().toString().trim();
-        String password = et_email.getText().toString().trim();
+        String password = et_password.getText().toString().trim();
 
         if (email.length() > 2 && password.length() > 0) {
             if (Main.isEmailValid(email)) {
@@ -118,9 +130,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                 finishLoading();
                 Log.d(TAG, "onResponse");
+                Log.d(TAG, response.toString());
 
                 Boolean success = response.body().getSuccess();
                 if (success) {
+                    userPrefs.setKeyLoadFotoFb(false);
                     saveUserAndContinue(response.body());
 
                 } else {
@@ -209,6 +223,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 Boolean success = response.body().getSuccess();
                 if (success) {
+                    userPrefs.setKeyLoadFotoFb(true);
                     saveUserAndContinue(response.body());
 
                 } else {
@@ -247,7 +262,22 @@ public class LoginActivity extends AppCompatActivity {
         userPrefs.setKeyIdFacebook(model.getIdFacebook());
         userPrefs.setKeyCiudad(model.getCiudadUsuario());
         userPrefs.setKeyEmail(model.getNickUsuario());
-        userPrefs.setKeyLoadFotoFb(true);
+
+        ArrayList<ContactItemModel> list = model.getContactos();
+
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String con_id = list.get(i).getIdContacto();
+                String name = list.get(i).getNombre();
+                String phone = list.get(i).getTelefono();
+                String mail = list.get(i).getEmailFriend();
+                String cod = list.get(i).getCodContacto();
+
+                Log.i(TAG, "insertando contacto...");
+
+                contactDB.insertContact(Integer.valueOf(con_id), name, phone, mail, cod);
+            }
+        }
 
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
@@ -285,6 +315,7 @@ public class LoginActivity extends AppCompatActivity {
                 finishLoading();
                 Boolean success = response.body().getSuccess();
                 if (success) {
+                    userPrefs.setKeyLoadFotoFb(false);
                     saveUserAndContinue(response.body());
 
                 } else {
@@ -378,4 +409,27 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+    private void getKeyHash() {
+        PackageInfo info;
+        try {
+            info = getPackageManager().getPackageInfo("com.apolomultimedia.guardify", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                //String something = new String(Base64.encodeBytes(md.digest()));
+                Log.e("hash key", something);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("no such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("exception", e.toString());
+        }
+
+    }
+
 }

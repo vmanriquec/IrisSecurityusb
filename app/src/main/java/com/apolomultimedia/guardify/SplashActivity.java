@@ -45,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void startHandler() {
-        handler.postDelayed(loopSplash, 3000);
+        handler.postDelayed(loopSplash, 2500);
 
     }
 
@@ -57,6 +57,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 if (userPrefs.getKeyLogged()) {
+                    intent.putExtra("load", "normal");
                     intent = new Intent(SplashActivity.this, MainActivity.class);
                 }
 

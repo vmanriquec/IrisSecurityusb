@@ -1,8 +1,6 @@
 package com.apolomultimedia.guardify.api.model;
 
-/**
- * Created by developer on 20/06/2016.
- */
+import java.util.ArrayList;
 
 public class UserModel {
 
@@ -10,6 +8,16 @@ public class UserModel {
     String message;
     String IdUsuario, NombreUsuario, ApellidosUsuario, LenguajeUsuario, GeneroUsuario,
             OnomasticoUsuario, FotoURL, CiudadUsuario, IdFacebook, NickUsuario;
+
+    ArrayList<ContactItemModel> Contacts;
+
+    public ArrayList<ContactItemModel> getContactos() {
+        return Contacts;
+    }
+
+    public void setContactos(ArrayList<ContactItemModel> contactos) {
+        Contacts = contactos;
+    }
 
     public Boolean getSuccess() {
         return success;

@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_phone"
+        android:title="@string/by_number"
+        android:icon="@drawable/ic_cellphone_android_black_24dp" />
+    <item
+        android:id="@+id/action_account"
+        android:title="@string/by_user"
+        android:icon="@drawable/ic_account_black_24dp"/>
+</menu>

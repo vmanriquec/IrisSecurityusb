@@ -1,6 +1,5 @@
 package com.apolomultimedia.guardify.adapter;
 
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

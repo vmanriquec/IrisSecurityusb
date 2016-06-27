@@ -1,8 +1,5 @@
 package com.apolomultimedia.guardify.util;
 
-/**
- * Created by developer on 20/06/2016.
- */
 public class Constantes {
 
     //public static final String SERVER = "http://apolomultimedia-server1.info/android/iris";
@@ -17,7 +14,13 @@ public class Constantes {
     public static final String LOGIN_FACEBOOK = "userLoginFacebook.php";
     public static final String REGISTER = "userRegister.php";
     public static final String CHECK_STATUS = "userCheckStatus.php";
+    public static final String UPDATE_DETAILS = "userUpdateDetails.php";
     public static final String UPDATE_PHOTO = "userUpdatePhoto.php";
+
+    // contacts
+    public static final String SAVE_CONTACT = "userSaveContact.php";
+    public static final String EDIT_CONTACT = "userEditContact.php";
+    public static final String DELETE_CONTACT = "userDeleteContact.php";
 
     // broadcast emiters
     public static final String BR_DEVICE_CONNECTED = "device_connected";

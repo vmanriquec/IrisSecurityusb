@@ -64,4 +64,21 @@
     <string name="share_gps_tracking_contacts_and_facebook">Share GPS tracking with all \n contacts, and post to Facebook</string>
     <string name="hold_secs">Hold ( 4 sec )</string>
     <string name="cancel_tracking">Cancel tracking</string>
+    <string name="add_new_contact">Add a new contact</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="by_number">By number</string>
+    <string name="by_user">By user</string>
+    <string name="saving">Saving</string>
+    <string name="you_have_no_contacts">You have no contacts</string>
+    <string name="edit_contact">Edit a contact</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="updating">Updating</string>
+    <string name="confirm_delete_contact">Are you sure do you want to delete this contact?</string>
+    <string name="confirm">Confirm</string>
+    <string name="deleting">Deleting</string>
+    <string name="must_complete_firstname">You must complete your first name</string>
 </resources>

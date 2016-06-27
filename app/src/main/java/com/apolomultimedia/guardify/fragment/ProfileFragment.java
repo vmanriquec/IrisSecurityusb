@@ -1,9 +1,15 @@
 package com.apolomultimedia.guardify.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,29 +25,41 @@ import android.widget.TextView;
 
 import com.apolomultimedia.guardify.MainActivity;
 import com.apolomultimedia.guardify.R;
+import com.apolomultimedia.guardify.api.ApiSingleton;
+import com.apolomultimedia.guardify.api.model.StatusModel;
+import com.apolomultimedia.guardify.api.model.UserModel;
+import com.apolomultimedia.guardify.app.GuardifyApplication;
 import com.apolomultimedia.guardify.custom.ui.CircleTransform;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.util.Constantes;
 import com.apolomultimedia.guardify.util.Main;
+import com.apolomultimedia.guardify.util.ToastUtil;
 import com.mukesh.countrypicker.fragments.CountryPicker;
 import com.mukesh.countrypicker.interfaces.CountryPickerListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.DataOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URLConnection;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-/**
- * Created by developer on 21/06/2016.
- */
 public class ProfileFragment extends Fragment {
+
+    private String TAG = getClass().getSimpleName();
 
     View view;
     UserPrefs userPrefs;
@@ -84,6 +102,9 @@ public class ProfileFragment extends Fragment {
     private FragmentActivity myContext;
 
     private static final int SELECT_PHOTO_RESULT = 100;
+    String URI_FOTO = "";
+
+    private ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -141,21 +162,106 @@ public class ProfileFragment extends Fragment {
 
         Log.i("Profile", "onActivityResult");
 
-        /*switch (requestCode) {
+        switch (requestCode) {
             case SELECT_PHOTO_RESULT:
                 Log.i("Profile", "photo selected");
-                final Uri selectedImage = data.getData();
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        executeSendPhoto(FilePath.getPath(getActivity(), selectedImage));
-                    }
-                }).start();
-
+                if (data != null) {
+                    Uri uriPhoto = data.getData();
+                    URI_FOTO = uriPhoto.toString();
+                    GuardifyApplication.imageLoader.displayImage(URI_FOTO, iv_foto);
+                }
 
                 break;
-        }*/
+        }
+    }
+
+    @OnClick(R.id.btn_save)
+    void onSave() {
+
+        String first_name = et_firstname.getText().toString().trim();
+        String last_name = et_lastname.getText().toString().trim();
+        String passwords = et_password.getText().toString().trim();
+        String gender = "M";
+        if (radio_female.isChecked()) {
+            gender = "F";
+        }
+        String birthday = tv_birthday.getText().toString().trim();
+        String country = tv_country.getText().toString().trim();
+
+        if (!first_name.equals("")) {
+            //new UpdatePhotoProfileAsync().execute();
+
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("idusuario", userPrefs.getKeyIdUsuario());
+            hashMap.put("first_name", first_name);
+            hashMap.put("last_name", last_name);
+            hashMap.put("password", passwords);
+            hashMap.put("gender", gender);
+            hashMap.put("birthday", birthday);
+            hashMap.put("country", country);
+
+            ApiSingleton.getApiService().doUpdateProfile(hashMap).enqueue(new Callback<UserModel>() {
+                @Override
+                public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                    Log.i(TAG, "onResponse update details");
+                    if (URI_FOTO.equals("")) {
+                        URI_FOTO = "";
+                        finishLoading();
+                        saveNewUserData(false);
+                    } else {
+                        doUpdatePhoto();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserModel> call, Throwable t) {
+                    finishLoading();
+                    ToastUtil.showToastConnection(getActivity());
+                }
+            });
+
+        } else {
+            ToastUtil.shortToast(getActivity(), getActivity().getResources().getString(
+                    R.string.must_complete_firstname
+            ));
+        }
+
+    }
+
+    private void doUpdatePhoto() {
+
+        final File file = new File(getRealPathFromUri(getActivity(), Uri.parse(URI_FOTO)));
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("picture", file.getName(), requestBody);
+
+        RequestBody descriptionRB = RequestBody.create(MediaType.parse("multipart/form-data"), userPrefs.getKeyIdUsuario());
+
+        ApiSingleton.getApiService().doUpdatePhoto(descriptionRB, body).enqueue(new Callback<StatusModel>() {
+            @Override
+            public void onResponse(Call<StatusModel> call, Response<StatusModel> response) {
+                Log.i(TAG, "onResponse update photo");
+                finishLoading();
+                saveNewUserData(true);
+                URI_FOTO = "";
+                et_password.setText("");
+            }
+
+            @Override
+            public void onFailure(Call<StatusModel> call, Throwable t) {
+                Log.i(TAG, "onFailure update photo");
+                finishLoading();
+                saveNewUserData(false);
+                ToastUtil.showToastConnection(getActivity());
+                et_password.setText("");
+            }
+        });
+
+    }
+
+    private void saveNewUserData(Boolean foto) {
+
     }
 
     private void loadUser() {
@@ -223,87 +329,40 @@ public class ProfileFragment extends Fragment {
         super.onAttach(context);
     }
 
-
-    private void executeSendPhoto(String path) {
-
-        int serverResponseCode = 0;
-        HttpURLConnection connection;
-        DataOutputStream dataOutputStream;
-        String lineEnd = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-
-        int bytesRead, bytesAvailable, bufferSize;
-        byte[] buffer;
-        int maxBufferSize = 1 * 1024 * 1024;
-        File selectedFile = new File(path);
-
-        String[] parts = path.split("/");
-        final String fileName = parts[parts.length - 1];
-        try {
-            FileInputStream fileInputStream = new FileInputStream(selectedFile);
-            URL url = new URL(Constantes.API_PATH + Constantes.UPDATE_PHOTO);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);//Allow Inputs
-            connection.setDoOutput(true);//Allow Outputs
-            connection.setUseCaches(false);//Don't use a cached Copy
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Connection", "Keep-Alive");
-            connection.setRequestProperty("ENCTYPE", "multipart/form-data");
-            connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            connection.setRequestProperty("photo", path);
-
-            //creating new dataoutputstream
-            dataOutputStream = new DataOutputStream(connection.getOutputStream());
-
-            //writing bytes to data outputstream
-            dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
-            dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"photo\";filename=\""
-                    + path + "\"" + lineEnd);
-            dataOutputStream.writeBytes(lineEnd);
-
-            dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
-            dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"id_usuario\""
-                    + userPrefs.getKeyIdUsuario() + "\"" + lineEnd);
-            dataOutputStream.writeBytes(lineEnd);
-
-            //returns no. of bytes present in fileInputStream
-            bytesAvailable = fileInputStream.available();
-            //selecting the buffer size as minimum of available bytes or 1 MB
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            //setting the buffer as byte array of size of bufferSize
-            buffer = new byte[bufferSize];
-
-            //reads bytes from FileInputStream(from 0th index of buffer to buffersize)
-            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
-            //loop repeats till bytesRead = -1, i.e., no bytes are left to read
-            while (bytesRead > 0) {
-                //write the bytes read from inputstream
-                dataOutputStream.write(buffer, 0, bufferSize);
-                bytesAvailable = fileInputStream.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-            }
-
-            dataOutputStream.writeBytes(lineEnd);
-            dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-            serverResponseCode = connection.getResponseCode();
-            String serverResponseMessage = connection.getResponseMessage();
-
-            //closing the input and output streams
-            fileInputStream.close();
-            dataOutputStream.flush();
-            dataOutputStream.close();
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+    public byte[] getImagenComprimida(Bitmap bitmap) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Bitmap bm = bitmap;
+        bm.compress(Bitmap.CompressFormat.JPEG, 75, bos); // Compresion
+        byte[] data = bos.toByteArray();
+        return data;
     }
 
+    private void initLoading(String msg) {
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(msg);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    private void finishLoading() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
+
+    public static String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 
 }

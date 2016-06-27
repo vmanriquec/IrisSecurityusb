@@ -164,6 +164,11 @@ public class ConnectFragment extends Fragment {
                         BluetoothDeviceModel device = deviceList.get(position);
                         connectDevice(device);
                     }
+
+                    @Override
+                    public void onItemLongCLick(View v, int position) {
+
+                    }
                 }));
 
             } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_STARTED)) {

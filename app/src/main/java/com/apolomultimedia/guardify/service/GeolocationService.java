@@ -42,7 +42,9 @@ public class GeolocationService extends Service implements GoogleApiClient.OnCon
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i(TAG, "starting command ...");
         if (googleApiClient != null && !googleApiClient.isConnected()) {
+            Log.i(TAG, "connection google apis ...");
             googleApiClient.connect();
         }
         return START_STICKY;

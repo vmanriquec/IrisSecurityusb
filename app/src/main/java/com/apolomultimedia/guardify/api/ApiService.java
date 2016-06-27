@@ -1,9 +1,12 @@
 package com.apolomultimedia.guardify.api;
 
 import com.apolomultimedia.guardify.api.model.CheckStatusModel;
+import com.apolomultimedia.guardify.api.model.ContactModel;
+import com.apolomultimedia.guardify.api.model.StatusModel;
 import com.apolomultimedia.guardify.api.model.UpdatePhotoModel;
 import com.apolomultimedia.guardify.api.model.UserModel;
 import com.apolomultimedia.guardify.util.Constantes;
+import com.google.android.gms.common.api.Status;
 
 import java.util.Map;
 
@@ -15,10 +18,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-
-/**
- * Created by developer on 20/06/2016.
- */
+import retrofit2.http.PartMap;
 
 public interface ApiService {
 
@@ -35,12 +35,28 @@ public interface ApiService {
     Call<UserModel> doRegister(@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST(Constantes.CHECK_STATUS)
-    Call<CheckStatusModel> doCheckStatus(@FieldMap Map<String, String> params);
+    @POST(Constantes.UPDATE_DETAILS)
+    Call<UserModel> doUpdateProfile(@FieldMap Map<String, String> params);
 
     @Multipart
     @POST(Constantes.UPDATE_PHOTO)
-    Call<UpdatePhotoModel> doUpdatePhoto(@Part("photo") RequestBody description,
-                                         @Part MultipartBody.Part file);
+    Call<StatusModel> doUpdatePhoto(@Part("idusuario") RequestBody idusuario,
+                                    @Part MultipartBody.Part file);
+
+    @FormUrlEncoded
+    @POST(Constantes.CHECK_STATUS)
+    Call<CheckStatusModel> doCheckStatus(@FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST(Constantes.SAVE_CONTACT)
+    Call<ContactModel> doSaveContact(@FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST(Constantes.EDIT_CONTACT)
+    Call<ContactModel> doEditContact(@FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST(Constantes.DELETE_CONTACT)
+    Call<StatusModel> doDeleteContact(@FieldMap Map<String, String> params);
 
 }
