@@ -2,9 +2,6 @@ package com.apolomultimedia.guardify.preference;
 
 import android.content.Context;
 
-/**
- * Created by developer on 22/06/2016.
- */
 public class BluePrefs {
 
     private SingletonPrefs prefs;
@@ -12,6 +9,8 @@ public class BluePrefs {
     private static final String KEY_CONNECTED = "blue_connected";
 
     private static final String KEY_PAIRED_MACCADDRESS = "paired_mac_address";
+    private static final String KEY_OPTION = "";
+    private static final String KEY_SUBOPTION = "";
 
     public BluePrefs(Context context) {
         prefs = SingletonPrefs.getInstance(context);
@@ -20,6 +19,24 @@ public class BluePrefs {
     public void reset() {
         setKeyBlueConnected(false);
         setKeyPairedMaccAddress("");
+        setKeyOption("");
+        setKeySuboption("");
+    }
+
+    public void setKeyOption(String value) {
+        prefs.put(KEY_OPTION, value);
+    }
+
+    public String getKeyOption() {
+        return prefs.getString(KEY_OPTION);
+    }
+
+    public void setKeySuboption(String value) {
+        prefs.put(KEY_SUBOPTION, value);
+    }
+
+    public String getKeySuboption() {
+        return prefs.getString(KEY_SUBOPTION);
     }
 
     public void setKeyPairedMaccAddress(String value) {

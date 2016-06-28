@@ -33,4 +33,12 @@ public class Constantes {
     // socket events
     public static final String EVENT_SOCKETID = "socket_id";
 
+    // options
+    public static final String OPT_TRACKGPS = "track_gps";
+
+    // suboptions
+    public static final String SUBOPT_FIRST = "first";
+    public static final String SUBOPT_SECOND = "second";
+    public static final String SUBOPT_THIRD = "third";
+
 }

@@ -26,6 +26,8 @@ public class UserPrefs {
 
     private static final String KEY_LATITUD = "latitud";
     private static final String KEY_LONGITUD = "longitud";
+    private static final String KEY_SPEED = "speed";
+    private static final String KEY_BATERY = "bater";
 
     private static final String KEY_SOCKET_CONNECTED = "socket_connected";
     private static final String KEY_SOCKET_ID = "socket_id";
@@ -44,6 +46,24 @@ public class UserPrefs {
         setKeyOnomastico("");
         setKeySocketConnected(false);
         setKeySocketId("");
+        setKeySpeed("0.0");
+        setKeyBatery("");
+    }
+
+    public void setKeySpeed(String value) {
+        prefs.put(KEY_SPEED, value);
+    }
+
+    public String getKeySpeed() {
+        return prefs.getString(KEY_SPEED);
+    }
+
+    public void setKeyBatery(String value) {
+        prefs.put(KEY_BATERY, value);
+    }
+
+    public String getKeyBatery() {
+        return prefs.getString(KEY_BATERY);
     }
 
     public void setKeyLatitud(String value) {

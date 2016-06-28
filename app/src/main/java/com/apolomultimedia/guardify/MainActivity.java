@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity
     private void handleExtras() {
         String load = getIntent().getStringExtra("load");
         if (load != null) {
-            Log.i(TAG, "load: " + load);
             switch (load) {
                 case "normal":
                     break;
@@ -145,10 +144,8 @@ public class MainActivity extends AppCompatActivity
 
         String URL_FOTO = Constantes.IMAGES_PATH + userPrefs.getKeyFoto();
         if (!userPrefs.getKeyIdFacebook().equals("") && userPrefs.getKeyLoadFotoFb()) {
-            Log.i(TAG, "cojo fb foto");
             URL_FOTO = "https://graph.facebook.com/" + userPrefs.getKeyIdFacebook() + "/picture?type=normal";
         }
-        Log.i(TAG, "URL_FOTO MainActivity: " + URL_FOTO);
 
         Picasso.with(MainActivity.this).invalidate(URL_FOTO);
 

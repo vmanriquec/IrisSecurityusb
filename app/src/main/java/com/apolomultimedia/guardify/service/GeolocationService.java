@@ -42,9 +42,7 @@ public class GeolocationService extends Service implements GoogleApiClient.OnCon
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "starting command ...");
         if (googleApiClient != null && !googleApiClient.isConnected()) {
-            Log.i(TAG, "connection google apis ...");
             googleApiClient.connect();
         }
         return START_STICKY;
@@ -84,11 +82,15 @@ public class GeolocationService extends Service implements GoogleApiClient.OnCon
     }
 
     private void handleNewLocation(Location location) {
-        Log.i(TAG, "handleNewLocaiton ...");
         if (location != null) {
-            Log.i(TAG, "saving new location ...");
             userPrefs.setKeyLatitud(location.getLatitude() + "");
             userPrefs.setKeyLongitud(location.getLongitude() + "");
+            if (location.hasSpeed()) {
+                Log.i(TAG, "speed found: " + location.getSpeed());
+                userPrefs.setKeySpeed(location.getSpeed() + "");
+            } else {
+                userPrefs.setKeySpeed("0.0");
+            }
         }
     }
 
@@ -117,7 +119,6 @@ public class GeolocationService extends Service implements GoogleApiClient.OnCon
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "stopping service...");
         stopSelf();
         if (googleApiClient != null && googleApiClient.isConnected()) {
             googleApiClient.disconnect();

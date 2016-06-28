@@ -46,6 +46,7 @@ import com.apolomultimedia.guardify.service.BluetoothService;
 import com.apolomultimedia.guardify.service.GeolocationService;
 import com.apolomultimedia.guardify.service.SocketService;
 import com.apolomultimedia.guardify.util.Constantes;
+import com.apolomultimedia.guardify.util.Main;
 import com.apolomultimedia.guardify.util.ToastUtil;
 import com.squareup.picasso.Picasso;
 
@@ -101,7 +102,6 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         handler = new Handler();
 
         startService(new Intent(TrackGPSActivity.this, GeolocationService.class));
-        startService(new Intent(TrackGPSActivity.this, SocketService.class));
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -324,8 +324,6 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     protected void onDestroy() {
-        stopService(new Intent(TrackGPSActivity.this, GeolocationService.class));
-        stopService(new Intent(TrackGPSActivity.this, SocketService.class));
         super.onDestroy();
     }
 
@@ -342,16 +340,20 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void doOneClick() {
-        ToastUtil.shortToast(TrackGPSActivity.this, "OPCION 1");
+        ToastUtil.shortToast(TrackGPSActivity.this, "TRACKGPS OPC 1");
+        Main.startServiceOptionSuboption(TrackGPSActivity.this, Constantes.OPT_TRACKGPS, Constantes.SUBOPT_FIRST);
     }
 
     private void doTwoClicks() {
-        ToastUtil.shortToast(TrackGPSActivity.this, "OPCION 2");
+        ToastUtil.shortToast(TrackGPSActivity.this, "TRACKGPS OPC 2");
+        Main.startServiceOptionSuboption(TrackGPSActivity.this, Constantes.OPT_TRACKGPS, Constantes.SUBOPT_SECOND);
     }
 
     private void doLongTap() {
         ToastUtil.shortToast(TrackGPSActivity.this, "CANCELANDO TRACKING");
+        Main.startServiceOptionSuboption(TrackGPSActivity.this, Constantes.OPT_TRACKGPS, Constantes.SUBOPT_THIRD);
     }
+
 
     BroadcastReceiver BR_TAPS = new BroadcastReceiver() {
         @Override

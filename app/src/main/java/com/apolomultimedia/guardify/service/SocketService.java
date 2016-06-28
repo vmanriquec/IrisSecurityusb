@@ -2,13 +2,13 @@ package com.apolomultimedia.guardify.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.apolomultimedia.guardify.app.GuardifyApplication;
 import com.apolomultimedia.guardify.database.ContactDB;
-import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.util.Constantes;
 import com.github.nkzawa.emitter.Emitter;
@@ -23,6 +23,7 @@ public class SocketService extends Service {
 
     UserPrefs userPrefs;
     ContactDB contactDB;
+    Handler handler;
 
     @Override
     public void onCreate() {
@@ -32,16 +33,33 @@ public class SocketService extends Service {
 
         userPrefs = new UserPrefs(this);
         contactDB = new ContactDB(this);
+        handler = new Handler();
 
         GuardifyApplication app = (GuardifyApplication) getApplication();
         mSocket = app.getSocket();
 
     }
 
+    Runnable runCheck = new Runnable() {
+        @Override
+        public void run() {
+
+            if (mSocket != null && mSocket.connected()) {
+                // do something
+            } else {
+                connectSocket();
+            }
+
+            handler.removeCallbacks(this);
+            handler.postDelayed(this, 15000);
+        }
+    };
+
     Emitter.Listener lConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             Log.i(TAG, "lConnect");
+            userPrefs.setKeySocketConnected(true);
         }
     };
 
@@ -49,6 +67,7 @@ public class SocketService extends Service {
         @Override
         public void call(Object... args) {
             Log.i(TAG, "lDisconnect");
+            userPrefs.setKeySocketConnected(false);
         }
     };
 
@@ -56,6 +75,23 @@ public class SocketService extends Service {
         @Override
         public void call(Object... args) {
             Log.i(TAG, "lReconnect");
+            userPrefs.setKeySocketConnected(true);
+        }
+    };
+
+    Emitter.Listener lConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.i(TAG, "lReconnect");
+            userPrefs.setKeySocketConnected(false);
+        }
+    };
+
+    Emitter.Listener lError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.i(TAG, "lReconnect");
+            userPrefs.setKeySocketConnected(false);
         }
     };
 
@@ -81,6 +117,8 @@ public class SocketService extends Service {
             mSocket.on(Socket.EVENT_CONNECT, lConnect);
             mSocket.on(Socket.EVENT_DISCONNECT, lDisconnect);
             mSocket.on(Socket.EVENT_RECONNECT, lReconnect);
+            mSocket.on(Socket.EVENT_CONNECT_ERROR, lConnectError);
+            mSocket.on(Socket.EVENT_ERROR, lError);
             mSocket.on(Constantes.EVENT_SOCKETID, lSocketId);
             mSocket.connect();
         }
@@ -93,14 +131,16 @@ public class SocketService extends Service {
             mSocket.off(Socket.EVENT_CONNECT);
             mSocket.off(Socket.EVENT_DISCONNECT);
             mSocket.off(Socket.EVENT_RECONNECT);
+            mSocket.off(Socket.EVENT_CONNECT_ERROR);
+            mSocket.off(Socket.EVENT_ERROR);
             mSocket.off(Constantes.EVENT_SOCKETID);
         }
         userPrefs.setKeySocketConnected(false);
     }
 
-    public void EmitData(String event, JSONObject data) {
+    public static void EmitData(String action, JSONObject data) {
         if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(event, data);
+            mSocket.emit(action, data);
         }
     }
 
@@ -108,12 +148,14 @@ public class SocketService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "onStartCommand SocketService");
         connectSocket();
-        return Service.START_NOT_STICKY;
+        handler.postDelayed(runCheck, 20000);
+        return Service.START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onStop");
         disconnectSocket();
         stopSelf();
     }
