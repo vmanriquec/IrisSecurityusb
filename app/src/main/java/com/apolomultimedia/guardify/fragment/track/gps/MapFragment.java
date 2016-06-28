@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.apolomultimedia.guardify.R;
+import com.apolomultimedia.guardify.TrackGPSActivity;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,15 +25,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MapFragment extends Fragment {
 
     private String TAG = getClass().getSimpleName();
 
+    @Bind(R.id.iv_fullscreen)
+    ImageView iv_fullscreen;
+
     View view;
     UserPrefs userPrefs;
     GoogleMap googleMap;
+    private boolean toogle_fullscreen = false;
 
     public MapFragment() {
     }
@@ -53,23 +61,39 @@ public class MapFragment extends Fragment {
         return view;
     }
 
+    @OnClick(R.id.iv_fullscreen)
+    void fullScreen() {
+        ((TrackGPSActivity) getActivity()).toogleFullScreenMap();
+        changeFullScreenIcon();
+    }
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible) {
+            changeFullScreenIcon();
+        }
+    }
+
+    private void changeFullScreenIcon() {
+        if (((TrackGPSActivity) getActivity()).ll_top.getVisibility() == View.VISIBLE &&
+                ((TrackGPSActivity) getActivity()).fl_tabs.getVisibility() == View.VISIBLE) {
+            iv_fullscreen.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_fullscreen_white_36dp));
+        } else {
+            iv_fullscreen.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_fullscreen_exit_white_36dp));
+        }
+    }
+
     private void requestIfHastLocation() {
         String latitud = userPrefs.getKeyLatitud();
         String longitud = userPrefs.getKeyLongitud();
 
-        Log.i(TAG, "latitud: " + latitud);
-        Log.i(TAG, "longitud: " + longitud);
-        Log.i(TAG, "requestion location...");
-
-
         if (!latitud.equals("") && !latitud.equals("0.00") && !longitud.equals("")
                 && !longitud.equals("0.00")) {
 
-            Log.i(TAG, "has location...");
             showCurrentLocation();
 
         } else {
-            Log.i(TAG, "has NO location...");
             new ThreadWaitForLocation().execute();
 
         }
@@ -98,7 +122,6 @@ public class MapFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
 
 
         }

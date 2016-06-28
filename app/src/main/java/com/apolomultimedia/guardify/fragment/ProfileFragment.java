@@ -38,6 +38,7 @@ import com.apolomultimedia.guardify.util.Main;
 import com.apolomultimedia.guardify.util.ToastUtil;
 import com.mukesh.countrypicker.fragments.CountryPicker;
 import com.mukesh.countrypicker.interfaces.CountryPickerListener;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -175,7 +176,10 @@ public class ProfileFragment extends Fragment {
                 if (data != null) {
                     Uri uriPhoto = data.getData();
                     URI_FOTO = uriPhoto.toString();
-                    GuardifyApplication.imageLoader.displayImage(URI_FOTO, iv_foto);
+                    //GuardifyApplication.imageLoader.displayImage(URI_FOTO, iv_foto);
+                    File file = new File(getRealPathFromUri(getActivity(), Uri.parse(URI_FOTO)));
+                    Picasso.with(getActivity()).load(file).transform(new CircleTransform())
+                            .into(iv_foto);
                 }
 
                 break;
@@ -216,6 +220,7 @@ public class ProfileFragment extends Fragment {
                     if (URI_FOTO.equals("")) {
                         URI_FOTO = "";
                         finishLoading();
+                        ToastUtil.shortToast(getActivity(), getActivity().getResources().getString(R.string.date_updated));
                         saveNewUserData(false);
                     } else {
                         doUpdatePhoto();
@@ -251,11 +256,13 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call<UploadPhotoModel> call, Response<UploadPhotoModel> response) {
                 Log.i(TAG, "onResponse update photo");
                 finishLoading();
-                saveNewUserData(true);
+                ToastUtil.shortToast(getActivity(), getActivity().getResources().getString(R.string.date_updated));
                 if (response.body().getFile_name() != null) {
+                    userPrefs.setKeyLoadFotoFb(false);
                     Log.i(TAG, "file_name: " + response.body().getFile_name());
                     userPrefs.setKeyFoto(response.body().getFile_name());
                 }
+                saveNewUserData(true);
                 URI_FOTO = "";
                 et_password.setText("");
             }
@@ -278,7 +285,7 @@ public class ProfileFragment extends Fragment {
         }
 
         String URL_FOTO = Constantes.IMAGES_PATH + userPrefs.getKeyFoto();
-        Picasso.with(getActivity()).load(URL_FOTO).transform(new CircleTransform()).into(iv_foto);
+        Log.i(TAG, "URL_FOTO: " + URL_FOTO);
 
         userPrefs.setKeyNombre(et_firstname.getText().toString().trim());
         userPrefs.setKeyApellido(et_lastname.getText().toString().trim());
@@ -291,7 +298,7 @@ public class ProfileFragment extends Fragment {
         userPrefs.setKeyCiudad(tv_country.getText().toString().trim());
         userPrefs.setKeyOnomastico(tv_birthday.getText().toString().trim());
 
-        loadUser();
+        loadUserDetails();
         ((MainActivity) getActivity()).loadUser();
 
     }

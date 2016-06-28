@@ -36,6 +36,14 @@ public class UserPrefs {
 
     public void reset() {
         setKeyLogged(false);
+        setKeyIdFacebook("");
+        setKeyLoadFotoFb(false);
+        setKeyIdusuario("");
+        setKeyCiudad("");
+        setKeyGenero("M");
+        setKeyOnomastico("");
+        setKeySocketConnected(false);
+        setKeySocketId("");
     }
 
     public void setKeyLatitud(String value) {
@@ -156,6 +164,23 @@ public class UserPrefs {
 
     public Boolean getKeyLoadFotoFb() {
         return prefs.getBoolean(KEY_LOAD_FOTO_FB);
+    }
+
+
+    public void setKeySocketConnected(Boolean val) {
+        prefs.put(KEY_SOCKET_CONNECTED, val);
+    }
+
+    public Boolean getKeySocketConnected() {
+        return prefs.getBoolean(KEY_SOCKET_CONNECTED);
+    }
+
+    public void setKeySocketId(String value) {
+        prefs.put(KEY_SOCKET_ID, value);
+    }
+
+    public String getKeySocketId() {
+        return prefs.getString(KEY_SOCKET_ID);
     }
 
 }

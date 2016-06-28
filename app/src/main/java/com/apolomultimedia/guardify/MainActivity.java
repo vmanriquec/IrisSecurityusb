@@ -33,8 +33,10 @@ import com.apolomultimedia.guardify.service.BlueetoothConnectionService;
 import com.apolomultimedia.guardify.service.BluetoothService;
 import com.apolomultimedia.guardify.util.Constantes;
 import com.apolomultimedia.guardify.util.Main;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.net.URL;
 import java.util.HashMap;
 
 import butterknife.ButterKnife;
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity
     public FragmentManager fragmentManager;
     int lastPosition = -1;
     private static final int id_home_fragment = 12345;
+
+    public ImageView iv_foto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,12 +141,20 @@ public class MainActivity extends AppCompatActivity
 
     public void loadUser() {
         View headerView = navigationView.getHeaderView(0);
-        ImageView iv_foto = (ImageView) headerView.findViewById(R.id.iv_foto);
+        iv_foto = (ImageView) headerView.findViewById(R.id.iv_foto);
+
         String URL_FOTO = Constantes.IMAGES_PATH + userPrefs.getKeyFoto();
         if (!userPrefs.getKeyIdFacebook().equals("") && userPrefs.getKeyLoadFotoFb()) {
+            Log.i(TAG, "cojo fb foto");
             URL_FOTO = "https://graph.facebook.com/" + userPrefs.getKeyIdFacebook() + "/picture?type=normal";
         }
-        Picasso.with(MainActivity.this).load(URL_FOTO).transform(new CircleTransform()).into(iv_foto);
+        Log.i(TAG, "URL_FOTO MainActivity: " + URL_FOTO);
+
+        Picasso.with(MainActivity.this).invalidate(URL_FOTO);
+
+        Picasso.with(MainActivity.this).load(URL_FOTO)
+                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                .transform(new CircleTransform()).into(iv_foto);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (iv_foto.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {

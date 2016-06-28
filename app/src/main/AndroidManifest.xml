@@ -73,8 +73,9 @@
 
         <!-- SERVICES -->
         <service android:name=".service.BluetoothService" />
-        <!--<service android:name=".service.BlueetoothConnectionService" />
-        <service android:name=".service.GeolocationService" />-->
+        <!--<service android:name=".service.BlueetoothConnectionService" />-->
+        <service android:name=".service.GeolocationService" />
+        <service android:name=".service.SocketService" />
 
         <!-- ACTIVITIES -->
         <activity

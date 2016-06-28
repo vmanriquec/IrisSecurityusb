@@ -1,13 +1,16 @@
 package com.apolomultimedia.guardify;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 import com.apolomultimedia.guardify.custom.ui.CircleTransform;
 import com.apolomultimedia.guardify.custom.ui.CustomTabLayout;
 
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -19,14 +22,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.apolomultimedia.guardify.custom.ui.ImageViewTap;
 import com.apolomultimedia.guardify.database.ContactDB;
 import com.apolomultimedia.guardify.fragment.track.gps.ContactsFragment;
 import com.apolomultimedia.guardify.fragment.track.gps.FacebookFragment;
@@ -36,7 +44,9 @@ import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.service.BluetoothService;
 import com.apolomultimedia.guardify.service.GeolocationService;
+import com.apolomultimedia.guardify.service.SocketService;
 import com.apolomultimedia.guardify.util.Constantes;
+import com.apolomultimedia.guardify.util.ToastUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -49,8 +59,18 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class TrackGPSActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private String TAG = getClass().getSimpleName();
+
+    ImageViewTap iv_gps;
+
     @Bind(R.id.tabs)
     TabLayout tabs;
+
+    @Bind(R.id.ll_top)
+    public LinearLayout ll_top;
+
+    @Bind(R.id.fl_tabs)
+    public FrameLayout fl_tabs;
 
     @Bind(R.id.viewpager)
     ViewPager viewPager;
@@ -61,6 +81,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
     UserPrefs userPrefs;
     BluePrefs bluePrefs;
     ContactDB contactDB;
+    Handler handler;
 
     private int[] tabIcons = {R.drawable.ic_playlist_check_white_24dp,
             R.drawable.ic_google_maps_white_24dp, R.drawable.ic_contact_mail_white_24dp,
@@ -72,11 +93,15 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.activity_track_gps);
         ButterKnife.bind(this);
 
+        iv_gps = (ImageViewTap) this.findViewById(R.id.iv_gps);
+
         userPrefs = new UserPrefs(getApplicationContext());
         bluePrefs = new BluePrefs(getApplicationContext());
         contactDB = new ContactDB(getApplicationContext());
+        handler = new Handler();
 
         startService(new Intent(TrackGPSActivity.this, GeolocationService.class));
+        startService(new Intent(TrackGPSActivity.this, SocketService.class));
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -112,6 +137,16 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
 
         changeHeaderDetails();
 
+    }
+
+    public void toogleFullScreenMap() {
+        if (ll_top.getVisibility() == View.VISIBLE && fl_tabs.getVisibility() == View.VISIBLE) {
+            ll_top.setVisibility(View.GONE);
+            fl_tabs.setVisibility(View.GONE);
+        } else {
+            ll_top.setVisibility(View.VISIBLE);
+            fl_tabs.setVisibility(View.VISIBLE);
+        }
     }
 
     private void changeHeaderDetails() {
@@ -278,6 +313,76 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public void onBackPressed() {
-        goHome();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            goHome();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(TrackGPSActivity.this, GeolocationService.class));
+        stopService(new Intent(TrackGPSActivity.this, SocketService.class));
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter IF = new IntentFilter();
+        IF.addAction(Constantes.BR_SINGLE_TAP);
+        IF.addAction(Constantes.BR_DOUBLE_TAP);
+        IF.addAction(Constantes.BR_LONG_TAP);
+        registerReceiver(BR_TAPS, IF);
+
+    }
+
+    private void doOneClick() {
+        ToastUtil.shortToast(TrackGPSActivity.this, "OPCION 1");
+    }
+
+    private void doTwoClicks() {
+        ToastUtil.shortToast(TrackGPSActivity.this, "OPCION 2");
+    }
+
+    private void doLongTap() {
+        ToastUtil.shortToast(TrackGPSActivity.this, "CANCELANDO TRACKING");
+    }
+
+    BroadcastReceiver BR_TAPS = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case Constantes.BR_SINGLE_TAP:
+                        doOneClick();
+                        break;
+
+                    case Constantes.BR_DOUBLE_TAP:
+                        doTwoClicks();
+                        break;
+
+                    case Constantes.BR_LONG_TAP:
+                        doLongTap();
+                        break;
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            unregisterReceiver(BR_TAPS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

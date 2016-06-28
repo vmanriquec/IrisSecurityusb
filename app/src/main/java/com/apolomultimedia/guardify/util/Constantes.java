@@ -2,8 +2,10 @@ package com.apolomultimedia.guardify.util;
 
 public class Constantes {
 
-    public static final String SERVER = "http://apolomultimedia-server1.info/android_j";
-    public static final String SOCKET_SERVER = "http://apolomultimedia-server1.info:XXXX";
+    //public static final String SERVER = "http://apolomultimedia-server1.info/android_j";
+    public static final String SERVER = "http://192.168.1.117/iris-security";
+    //public static final String SOCKET_SERVER = "http://apolomultimedia-server1.info:XXXX";
+    public static final String SOCKET_SERVER = "http://192.168.1.117:3000";
 
     public static final String API_PATH = SERVER + "/api/";
     public static final String IMAGES_PATH = SERVER + "/images/";
@@ -24,5 +26,11 @@ public class Constantes {
     // broadcast emiters
     public static final String BR_DEVICE_CONNECTED = "device_connected";
     public static final String BR_DEVICE_DISCONNECTED = "device_disconnected";
+    public static final String BR_SINGLE_TAP = "single_tap";
+    public static final String BR_DOUBLE_TAP = "double_tap";
+    public static final String BR_LONG_TAP = "long_tap";
+
+    // socket events
+    public static final String EVENT_SOCKETID = "socket_id";
 
 }
