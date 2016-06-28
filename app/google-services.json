@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "527149152135",
+    "firebase_url": "https://guardify-53b1a.firebaseio.com",
+    "project_id": "guardify-53b1a",
+    "storage_bucket": "guardify-53b1a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527149152135:android:2ced831c8e37dac2",
+        "android_client_info": {
+          "package_name": "com.apolomultimedia.guardify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527149152135-rptdmhmgqn30nddp715t0gtpskc8hon9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBASUorUm8EZOyiDvSzv3pHQ57wmUiiPvw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
