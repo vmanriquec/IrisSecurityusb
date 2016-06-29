@@ -6,22 +6,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.apolomultimedia.guardify.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class FacebookFragment extends Fragment {
 
     View view;
 
-    public FacebookFragment() {
-    }
+    @Bind(R.id.tv_test)
+    TextView tv_test;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    Button btn_test;
 
     @Nullable
     @Override
@@ -29,7 +30,24 @@ public class FacebookFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_track_gps_facebook, container, false);
         ButterKnife.bind(this, view);
 
+        loadUI();
+
         return view;
+    }
+
+    private void loadUI() {
+        btn_test = (Button) view.findViewById(R.id.btn_test);
+        btn_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    @OnClick(R.id.tv_test)
+    void abrirTest() {
+        // logic
     }
 
 }

@@ -86,7 +86,6 @@ public class GeolocationService extends Service implements GoogleApiClient.OnCon
             userPrefs.setKeyLatitud(location.getLatitude() + "");
             userPrefs.setKeyLongitud(location.getLongitude() + "");
             if (location.hasSpeed()) {
-                Log.i(TAG, "speed found: " + location.getSpeed());
                 userPrefs.setKeySpeed(location.getSpeed() + "");
             } else {
                 userPrefs.setKeySpeed("0.0");

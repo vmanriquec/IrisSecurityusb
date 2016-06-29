@@ -48,6 +48,7 @@ public class ConnectFragment extends Fragment {
     BluetoothAdapter bluetoothAdapter;
     ArrayList<BluetoothDeviceModel> deviceList = new ArrayList<>();
     LinearLayoutManager layoutManager;
+
     @Bind(R.id.rv_devices)
     RecyclerView rv_devices;
 
@@ -148,7 +149,6 @@ public class ConnectFragment extends Fragment {
                 srl_refresh.setVisibility(View.VISIBLE);
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (deviceList.size() > 0) {
-                    Log.i(TAG, "size: " + rv_devices.getAdapter().getItemCount());
                     showUIFoundDevice();
                     srl_refresh.setRefreshing(false);
 
@@ -188,7 +188,7 @@ public class ConnectFragment extends Fragment {
         BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(device.getMACAddress());
         ToastUtil.shortToast(getActivity(), getActivity().getString(R.string.connecting));
 
-        Intent intent = new Intent(getActivity(), BlueetoothConnectionService.class);
+        Intent intent = new Intent(getActivity(), BluetoothService.class);
         intent.putExtra("mac", bluetoothDevice.getAddress());
         getActivity().startService(intent);
 

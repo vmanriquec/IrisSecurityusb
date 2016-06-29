@@ -9,8 +9,8 @@ public class BluePrefs {
     private static final String KEY_CONNECTED = "blue_connected";
 
     private static final String KEY_PAIRED_MACCADDRESS = "paired_mac_address";
-    private static final String KEY_OPTION = "";
-    private static final String KEY_SUBOPTION = "";
+    private static final String KEY_OPTION = "option";
+    private static final String KEY_SUBOPTION = "suboption";
 
     public BluePrefs(Context context) {
         prefs = SingletonPrefs.getInstance(context);

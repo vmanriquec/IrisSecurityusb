@@ -68,8 +68,8 @@
             <Button
                 android:id="@+id/btn_login"
                 style="@style/btn_primary"
-                android:layout_width="match_parent"
                 fontPath="fonts/MyriadPro-Regular.otf"
+                android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
@@ -86,12 +86,12 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="20dp"
-                android:stateListAnimator="@null"
                 android:drawableLeft="@drawable/icn_facebook"
                 android:drawablePadding="-10dp"
                 android:drawableStart="@drawable/icn_facebook"
                 android:paddingLeft="15dp"
                 android:paddingStart="15dp"
+                android:stateListAnimator="@null"
                 android:text="@string/login_with_facebook"
                 android:textAllCaps="false"
                 android:textSize="15sp" />
@@ -194,8 +194,8 @@
                 android:layout_height="42dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:stateListAnimator="@null"
                 android:layout_marginTop="25dp"
+                android:stateListAnimator="@null"
                 android:text="@string/register"
                 android:textSize="15sp" />
 
@@ -208,8 +208,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="center"
         android:layout_marginBottom="30dp"
+        android:gravity="center"
         android:text="@string/create_account"
         android:textColor="@drawable/login_click"
         android:textSize="17sp" />

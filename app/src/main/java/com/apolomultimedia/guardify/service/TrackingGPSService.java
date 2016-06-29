@@ -39,7 +39,6 @@ public class TrackingGPSService extends Service {
             userPrefs.setKeyBatery(battery);
 
             if (SocketService.mSocket != null && userPrefs.getKeySocketConnected()) {
-                Log.i(TAG, "emit save_track");
                 JSONObject json = new JSONObject();
                 try {
                     json.put("latitude", userPrefs.getKeyLatitud());

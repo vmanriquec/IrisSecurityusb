@@ -244,10 +244,8 @@ public class BluetoothService extends Service {
         Log.i(TAG, "onStartCommand");
 
         if (intent != null) {
-            Log.i(TAG, " != null ");
             String mac = intent.getStringExtra("mac");
             if (mac != null) {
-                Log.i(TAG, " connecting.... ");
                 connectDevice(mac);
             }
         }

@@ -129,8 +129,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                 finishLoading();
-                Log.d(TAG, "onResponse");
-                Log.d(TAG, response.toString());
 
                 Boolean success = response.body().getSuccess();
                 if (success) {
@@ -272,8 +270,6 @@ public class LoginActivity extends AppCompatActivity {
                 String phone = list.get(i).getTelefono();
                 String mail = list.get(i).getEmailFriend();
                 String cod = list.get(i).getCodContacto();
-
-                Log.i(TAG, "insertando contacto...");
 
                 contactDB.insertContact(Integer.valueOf(con_id), name, phone, mail, cod);
             }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.apolomultimedia.guardify.custom.ui.CircleTransform;
-import com.apolomultimedia.guardify.custom.ui.CustomTabLayout;
 
 import android.content.IntentFilter;
 import android.graphics.Typeface;
@@ -22,16 +21,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.apolomultimedia.guardify.custom.ui.ImageViewTap;
@@ -44,7 +40,6 @@ import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.service.BluetoothService;
 import com.apolomultimedia.guardify.service.GeolocationService;
-import com.apolomultimedia.guardify.service.SocketService;
 import com.apolomultimedia.guardify.util.Constantes;
 import com.apolomultimedia.guardify.util.Main;
 import com.apolomultimedia.guardify.util.ToastUtil;

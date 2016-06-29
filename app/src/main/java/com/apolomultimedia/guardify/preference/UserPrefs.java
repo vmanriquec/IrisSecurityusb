@@ -2,10 +2,6 @@ package com.apolomultimedia.guardify.preference;
 
 import android.content.Context;
 
-/**
- * Created by developer on 20/06/2016.
- */
-
 public class UserPrefs {
 
     private SingletonPrefs prefs;
@@ -27,7 +23,7 @@ public class UserPrefs {
     private static final String KEY_LATITUD = "latitud";
     private static final String KEY_LONGITUD = "longitud";
     private static final String KEY_SPEED = "speed";
-    private static final String KEY_BATERY = "bater";
+    private static final String KEY_BATERY = "batery";
 
     private static final String KEY_SOCKET_CONNECTED = "socket_connected";
     private static final String KEY_SOCKET_ID = "socket_id";

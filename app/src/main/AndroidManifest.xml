@@ -21,7 +21,6 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -33,6 +32,7 @@
     <permission
         android:name="com.apolomultimedia.guardify.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.apolomultimedia.guardify.permission.C2D_MESSAGE" />
 
     <permission
@@ -75,7 +75,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA9FdQTkMs2wh3Dybzcc2E4WENg7zHKk48" />
 
-
         <!-- GCM -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -88,6 +87,7 @@
                 <category android:name="com.apolomultimedia.guardify.gcm" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".gcm.MyGcmListenerService"
             android:exported="false">
@@ -104,10 +104,9 @@
         </service>
         <service android:name=".gcm.RegistrationIntentService" />
 
-
         <!-- SERVICES -->
-        <service android:name=".service.BluetoothService" />
-        <!--<service android:name=".service.BlueetoothConnectionService" />-->
+        <!-- <service android:name=".service.BluetoothService" /> -->
+        <service android:name=".service.BlueetoothConnectionService" />
         <service android:name=".service.GeolocationService" />
         <service android:name=".service.SocketService" />
         <service android:name=".service.TrackingGPSService" />
@@ -121,6 +120,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".TrackGPSActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TrackCallActivity"
             android:screenOrientation="portrait" />
     </application>
 
