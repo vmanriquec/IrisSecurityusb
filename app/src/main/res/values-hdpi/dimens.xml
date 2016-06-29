@@ -1,0 +1,6 @@
+<resources>
+
+    <dimen name="width_photo_menu">100dp</dimen>
+    <dimen name="height_photo_menu">100dp</dimen>
+
+</resources>
