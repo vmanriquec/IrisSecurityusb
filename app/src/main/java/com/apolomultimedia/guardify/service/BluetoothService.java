@@ -123,6 +123,7 @@ public class BluetoothService extends Service {
                 bluePrefs.setKeyBlueConnected(true);
                 sendInternalBroadcast(Constantes.BR_DEVICE_CONNECTED);
                 bluePrefs.setKeyPairedMaccAddress(bluetoothDevice.getAddress());
+                /*corre el hilo para conectar equipo*/
                 RUNN_THREAD = true;
                 new ThreadCommunicationDevice().execute();
             }
@@ -160,7 +161,7 @@ public class BluetoothService extends Service {
 
         }
     };
-
+/*comunicacion entre equipos */
     class ThreadCommunicationDevice extends AsyncTask<Void, Void, Void> {
         private InputStream inputStream = null;
         private OutputStream outputStream = null;

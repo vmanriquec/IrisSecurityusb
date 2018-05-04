@@ -12,6 +12,7 @@
     <string name="enable_location_services">Enable location services to use this application</string>
     <string name="enable">Enable</string>
     <string name="email">Email</string>
+    <string name="view">View</string>
     <string name="password">Password</string>
     <string name="password_enter_reset">Password / Enter to change it</string>
     <string name="login">Login</string>
@@ -57,12 +58,27 @@
     <string name="instructions">Instructions</string>
     <string name="facebook">Facebook</string>
     <string name="contacts">Contacts</string>
+
     <string name="map">Map</string>
+    <string name="Photo_gallery">Photo gallery</string>
+    <string name="audio_gallery">Audio gallery</string>
+    <string name="play">Play</string>
+    <string name="deleted">Delete</string>
+    <string name="exit">Exit</string>
+
+
     <string name="one_click">1 click</string>
     <string name="share_gps_tracking_first_contact">Share GPS tracking with \n the first contact</string>
     <string name="share_gps_tracking_contacts_selected">Share GPS tracking with \n all the selected contacts</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="cancel_Video">Cancel Camera / Video</string>
+    <string name="audio_recording">Start Recording Audio</string>
+    <string name="stop_recording">Stop Recording</string>
+    <string name="cancel_recording">Cancel Recording</string>
+    <string name="Playing_audio">Playing audio</string>
     <string name="two_click">2 clicks</string>
     <string name="share_gps_tracking_contacts_and_facebook">Share GPS tracking with all \n contacts, and post to Facebook</string>
+    <string name="Record_a_video">Record a video</string>
     <string name="hold_secs">Hold ( 4 sec )</string>
     <string name="cancel_tracking">Cancel tracking</string>
     <string name="add_new_contact">Add a new contact</string>
@@ -84,4 +100,5 @@
     <string name="must_complete_firstname">You must complete your first name</string>
     <string name="date_updated">Data updated</string>
     <string name="gcm_defaultSenderId">213856184230</string>
+    <string name="test_string">test string</string>
 </resources>

@@ -8,12 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.internal.NavigationMenu;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +26,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.apolomultimedia.guardify.R;
 import com.apolomultimedia.guardify.adapter.ContactListAdapter;
 import com.apolomultimedia.guardify.api.ApiSingleton;
-import com.apolomultimedia.guardify.api.model.ContactItemModel;
 import com.apolomultimedia.guardify.api.model.StatusModel;
 import com.apolomultimedia.guardify.database.ContactDB;
 import com.apolomultimedia.guardify.model.ContactModel;
@@ -264,7 +261,15 @@ public class ContactsFragment extends Fragment {
                         String phone = phone_phone.getText().toString();
 
                         if (name.length() > 2 && phone.length() > 3) {
+
+
+
                             saveContactRetrofit(name, phone, "", "1");
+
+
+
+
+
                         } else {
                             return;
                         }

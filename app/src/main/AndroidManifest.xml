@@ -10,9 +10,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA"
+        />
 
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+
+    <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -28,6 +32,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
 
     <permission
         android:name="com.apolomultimedia.guardify.permission.C2D_MESSAGE"
@@ -73,7 +80,8 @@
         <!-- GOOGLE API KEY -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA9FdQTkMs2wh3Dybzcc2E4WENg7zHKk48" />
+            android:value="AIzaSyA6JNbobhdQ6wvaeHMWk0bXF2XrsJzZRSE"
+            />
 
         <!-- GCM -->
         <receiver
@@ -116,6 +124,13 @@
             android:name=".LoginActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".MicrofonoActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".CamaraActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -124,6 +139,22 @@
         <activity
             android:name=".TrackCallActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".fragment.track.media.Video.Grabarvideo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".fragment.track.media.Recursos_local"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".fragment.track.media.Galeria"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".fragment.track.media.DetailActivity"
+            android:screenOrientation="portrait" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

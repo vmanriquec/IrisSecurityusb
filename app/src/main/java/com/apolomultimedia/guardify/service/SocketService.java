@@ -29,7 +29,7 @@ public class SocketService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Log.i(TAG, "onCreate SocketService...");
+        Log.i(TAG, "Creando el Servicio de Sockets...");
 
         userPrefs = new UserPrefs(this);
         contactDB = new ContactDB(this);
@@ -58,7 +58,7 @@ public class SocketService extends Service {
     Emitter.Listener lConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "lConnect");
+            Log.i(TAG, "conectar socket --- lConnect");
             userPrefs.setKeySocketConnected(true);
         }
     };
@@ -66,7 +66,7 @@ public class SocketService extends Service {
     Emitter.Listener lDisconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "lDisconnect");
+            Log.i(TAG, "Desconectar socket --- lDisconnect");
             userPrefs.setKeySocketConnected(false);
         }
     };
@@ -74,7 +74,7 @@ public class SocketService extends Service {
     Emitter.Listener lReconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "lReconnect");
+            Log.i(TAG, "Reconectar Socket --- lReconnect");
             userPrefs.setKeySocketConnected(true);
         }
     };
@@ -82,7 +82,7 @@ public class SocketService extends Service {
     Emitter.Listener lConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "lReconnect");
+            Log.i(TAG, "Error de conexion Socket --- lReconnect");
             userPrefs.setKeySocketConnected(false);
         }
     };
@@ -98,7 +98,7 @@ public class SocketService extends Service {
     Emitter.Listener lSocketId = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "lSocketid");
+            Log.i(TAG, "Identificador de socket --- lSocketid");
             JSONObject data = (JSONObject) args[0];
             try {
                 String socket_id = data.getString("socket_id");

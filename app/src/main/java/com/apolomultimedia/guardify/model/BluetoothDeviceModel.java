@@ -30,6 +30,8 @@ public class BluetoothDeviceModel {
         this.name = name;
     }
 
+    /*identificar el servicio del blotoo UUID_SERIAL*/
+
     private static final String UUID_SERIAL = "00001101-0000-1000-8000-00805F9B34FB";
 
     public static java.util.UUID getUUID()

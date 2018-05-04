@@ -20,10 +20,10 @@ public class FilePath {
      */
     public static String getPath(final Context context, final Uri uri) {
 
-        // check here to KITKAT or new version
+        // cheka version actual
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
-        // DocumentProvider
+        // ubicacion de rutas de los archivos segun version de android
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
 
             // ExternalStorageProvider
@@ -69,16 +69,16 @@ public class FilePath {
                         selectionArgs);
             }
         }
-        // MediaStore (and general)
+
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
-            // Return the remote address
+
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
 
             return getDataColumn(context, uri, null, null);
         }
-        // File
+
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }

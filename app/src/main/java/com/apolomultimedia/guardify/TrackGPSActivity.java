@@ -3,12 +3,10 @@ package com.apolomultimedia.guardify;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import com.apolomultimedia.guardify.custom.ui.CircleTransform;
-
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -20,7 +18,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,12 +27,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apolomultimedia.guardify.custom.ui.CircleTransform;
 import com.apolomultimedia.guardify.custom.ui.ImageViewTap;
 import com.apolomultimedia.guardify.database.ContactDB;
 import com.apolomultimedia.guardify.fragment.track.gps.ContactsFragment;
-import com.apolomultimedia.guardify.fragment.track.gps.FacebookFragment;
 import com.apolomultimedia.guardify.fragment.track.gps.InstructionsFragment;
 import com.apolomultimedia.guardify.fragment.track.gps.MapFragment;
+import com.apolomultimedia.guardify.fragment.track.media.FacebookFragment;
 import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.service.BluetoothService;
@@ -89,13 +87,15 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.activity_track_gps);
         ButterKnife.bind(this);
 
-        iv_gps = (ImageViewTap) this.findViewById(R.id.iv_gps);
 
+/*ninicializa los objetos usuarios contactos dispositivos */
         userPrefs = new UserPrefs(getApplicationContext());
         bluePrefs = new BluePrefs(getApplicationContext());
         contactDB = new ContactDB(getApplicationContext());
         handler = new Handler();
 
+
+        /*inicia el servicio de geolocalizacion */
         startService(new Intent(TrackGPSActivity.this, GeolocationService.class));
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -107,8 +107,9 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+/* carga datos de usuarios*/
         loadUser();
+
         unCheckFirstItem();
 
         setupViewPager();
@@ -116,7 +117,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         //setupIcons();
 
     }
-
+/*craga usuarios con su respectiva imagen */
     public void loadUser() {
         View headerView = navigationView.getHeaderView(0);
         ImageView iv_foto = (ImageView) headerView.findViewById(R.id.iv_foto);
@@ -130,6 +131,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         String names = userPrefs.getKeyNombre() + " " + userPrefs.getKeyApellido();
         tv_names.setText(names);
 
+        /*llama metodo cambia cabecera detalles*/
         changeHeaderDetails();
 
     }
@@ -143,7 +145,15 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
             fl_tabs.setVisibility(View.VISIBLE);
         }
     }
-
+    /*metodo cabecera detalles
+    * se verificara
+    * estado de usuario para mostrarlo (activo inactivo)
+    * genero (male o female)
+    *
+    * pais
+    *
+    *
+    * */
     private void changeHeaderDetails() {
         View headerView = navigationView.getHeaderView(0);
         TextView tv_details = (TextView) headerView.findViewById(R.id.tv_details);
@@ -179,17 +189,18 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
     void openDrawer() {
         drawer.openDrawer(Gravity.LEFT);
     }
-
+/*setea las caracteristicas iniciales de viewgroup para los tabs*/
     private void setupTabLayout() {
         tabs.setupWithViewPager(viewPager);
+        /*  verifica version de android que sea mayor que 23 para efectos a mostrar en el viewpager*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             tabs.setTabTextColors(getResources().getColorStateList(R.color.tab_selector, null));
         } else {
             tabs.setTabTextColors(getResources().getColorStateList(R.color.tab_selector));
         }
-
+/*asigna el tipo de fuente */
         Typeface open_sans_regular = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
-
+/* tabs */
         ViewGroup viewGroup = (ViewGroup) tabs.getChildAt(0);
         int tabsCount = viewGroup.getChildCount();
         for (int j = 0; j < tabsCount; j++) {
@@ -204,7 +215,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         }
 
     }
-
+/* llena los tabs con los fragments respectivos*/
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new InstructionsFragment(), getString(R.string.instructions));
@@ -213,7 +224,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         adapter.addFragment(new FacebookFragment(), getString(R.string.facebook));
         viewPager.setAdapter(adapter);
     }
-
+    /* muestra los fragment de acuerdo a la seleccion en la navigationView*/
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -222,7 +233,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         drawer.closeDrawer(GravityCompat.START);
         return false;
     }
-
+    /*metodo para cargar los fragment seleccionados*/
     private void triggerChangeFragment(int id) {
         String action = "";
         switch (id) {
@@ -250,7 +261,10 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
             finish();
         }
     }
-
+/* sale de la aplicacion limpia   los objetos usuario dispositivos y elimina el registro de contactos cargados anteriormente
+* detiene los servicos de Bluetooth
+* y muestra la pantalla de login
+* */
     private void signout() {
         userPrefs.reset();
         bluePrefs.reset();
@@ -289,7 +303,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
             return mFragmentTitleList.get(position);
         }
     }
-
+/* pone al frente el menu home*/
     @OnClick(R.id.iv_home)
     void home() {
         goHome();
@@ -305,7 +319,7 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(base));
     }
-
+/*muestra si esta abierto el menu drawer cierra lateral*/
     @Override
     public void onBackPressed() {
 
@@ -333,19 +347,19 @@ public class TrackGPSActivity extends AppCompatActivity implements NavigationVie
         registerReceiver(BR_TAPS, IF);
 
     }
-
+/* en el logo central de guardify se captura las pulsaciones hechas un pulso, dos pulsos, pulso largo*/
     private void doOneClick() {
-        ToastUtil.shortToast(TrackGPSActivity.this, "TRACKGPS OPC 1");
+        ToastUtil.shortToast(TrackGPSActivity.this, "TRACKGPS OPTION 1");
         Main.startServiceOptionSuboption(TrackGPSActivity.this, Constantes.OPT_TRACKGPS, Constantes.SUBOPT_FIRST);
     }
 
     private void doTwoClicks() {
-        ToastUtil.shortToast(TrackGPSActivity.this, "TRACKGPS OPC 2");
+        ToastUtil.shortToast(TrackGPSActivity.this, "TRACKGPS OPTION 2");
         Main.startServiceOptionSuboption(TrackGPSActivity.this, Constantes.OPT_TRACKGPS, Constantes.SUBOPT_SECOND);
     }
 
     private void doLongTap() {
-        ToastUtil.shortToast(TrackGPSActivity.this, "CANCELANDO TRACKING");
+        ToastUtil.shortToast(TrackGPSActivity.this, "CANCEL TRACKING");
         Main.startServiceOptionSuboption(TrackGPSActivity.this, Constantes.OPT_TRACKGPS, Constantes.SUBOPT_THIRD);
     }
 

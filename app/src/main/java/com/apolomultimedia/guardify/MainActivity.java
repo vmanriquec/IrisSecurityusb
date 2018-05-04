@@ -1,7 +1,9 @@
 package com.apolomultimedia.guardify;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,12 +29,17 @@ import com.apolomultimedia.guardify.database.ContactDB;
 import com.apolomultimedia.guardify.fragment.ConnectFragment;
 import com.apolomultimedia.guardify.fragment.HomeFragment;
 import com.apolomultimedia.guardify.fragment.ProfileFragment;
+import com.apolomultimedia.guardify.fragment.track.media.Recursos_local;
 import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.service.BlueetoothConnectionService;
 import com.apolomultimedia.guardify.service.BluetoothService;
 import com.apolomultimedia.guardify.util.Constantes;
 import com.apolomultimedia.guardify.util.Main;
+import com.apolomultimedia.guardify.util.ToastUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.GoogleMap;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -49,7 +56,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private String TAG = getClass().getSimpleName();
+   // private String TAG = getClass().getSimpleName();
 
     UserPrefs userPrefs;
     BluePrefs bluePrefs;
@@ -63,6 +70,25 @@ public class MainActivity extends AppCompatActivity
 
     public ImageView iv_foto;
 
+
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+    private static final int REQUEST_LOCATION = 0;
+    private Location mLastLocation;
+    // Google client to interact with Google API
+    private GoogleApiClient mGoogleApiClient;
+    // boolean flag to toggle periodic location updates
+    private boolean mRequestingLocationUpdates = false;
+    private LocationRequest mLocationRequest;
+    private static final String TAG = "";
+    private GoogleMap mMap;
+    private int markerCount;
+    String lat,lon;
+
+    private String session,imgUrl,nombreususrio;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         userPrefs = new UserPrefs(getApplicationContext());
         bluePrefs = new BluePrefs(getApplicationContext());
         contactDB = new ContactDB(getApplicationContext());
-
+userPrefs.getKeyFoto();
         /*Intent i = new Intent(MainActivity.this, BlueetoothConnectionService.class);
         if (!bluePrefs.getKeyPairedMaccAddress().equals("")) {
             i.putExtra("mac", bluePrefs.getKeyPairedMaccAddress());
@@ -117,6 +143,10 @@ public class MainActivity extends AppCompatActivity
                     triggerChangeFragment(R.id.nav_contact);
                     break;
 
+                case "vista":
+                    triggerChangeFragment(R.id.recursos);
+                    break;
+
             }
         }
     }
@@ -137,6 +167,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().getItem(0).setChecked(true);
         triggerChangeFragment(R.id.nav_connect);
     }
+    /* obtenemos la foto desde facebook  a travez de **https://graph.facebook.com/**
+    adicionando la key desde el objeto userPrefs guardado del login  redondeamos la imagen con picasso
+    ademas condicionamos la version de android, si es mayor a lollipop acomoda los maregenes de la cebecera (foto)    */
 
     public void loadUser() {
         View headerView = navigationView.getHeaderView(0);
@@ -145,8 +178,15 @@ public class MainActivity extends AppCompatActivity
         String URL_FOTO = Constantes.IMAGES_PATH + userPrefs.getKeyFoto();
         if (!userPrefs.getKeyIdFacebook().equals("") && userPrefs.getKeyLoadFotoFb()) {
             URL_FOTO = "https://graph.facebook.com/" + userPrefs.getKeyIdFacebook() + "/picture?type=normal";
-        }
+        } /*else
+       coloca una imagen cuando no existe foto
+        {
 
+                Picasso.with(MainActivity.this).load(R.drawable.ic_account_black_18dp)
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .transform(new CircleTransform()).into(iv_foto);
+        }
+        */
         Picasso.with(MainActivity.this).invalidate(URL_FOTO);
 
         Picasso.with(MainActivity.this).load(URL_FOTO)
@@ -194,15 +234,22 @@ public class MainActivity extends AppCompatActivity
 
     private void triggerChangeFragment(int id) {
         Fragment fragment = null;
+        Activity actividad=null;
         switch (id) {
             case R.id.nav_connect:
                 fragment = new ConnectFragment();
+
+
                 break;
 
             case R.id.nav_profile:
                 fragment = new ProfileFragment();
                 break;
+            case R.id.recursos:
+                ToastUtil.shortToast(this,"listar archivos media");
+                               // fragment = new Recursos_local();
 
+                break;
             case R.id.nav_signout:
                 signout();
                 break;

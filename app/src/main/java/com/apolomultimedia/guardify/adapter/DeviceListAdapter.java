@@ -17,6 +17,10 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     private ArrayList<BluetoothDeviceModel> deviceList;
     private RecyclerViewOnItemClickListener recyclerViewOnItemClickListener;
 
+
+
+
+
     public DeviceListAdapter(ArrayList<BluetoothDeviceModel> deviceList,
                              RecyclerViewOnItemClickListener recyclerViewOnItemClickListener) {
         this.deviceList = deviceList;

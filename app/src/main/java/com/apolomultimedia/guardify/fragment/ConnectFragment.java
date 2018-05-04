@@ -183,8 +183,10 @@ public class ConnectFragment extends Fragment {
 
         }
     };
+/*pasamos la mac a la actividad BluetoothService y la iniciamos */
 
     private void connectDevice(BluetoothDeviceModel device) {
+
         BluetoothDevice bluetoothDevice = bluetoothAdapter.getRemoteDevice(device.getMACAddress());
         ToastUtil.shortToast(getActivity(), getActivity().getString(R.string.connecting));
 
@@ -198,7 +200,7 @@ public class ConnectFragment extends Fragment {
     void research() {
         searchDevices();
     }
-
+/*validadciones de las pantalla botones o textos segun el estado de equipos Bluetooth*/
     private void showUINoDevices() {
         ll_loading.setVisibility(View.GONE);
         srl_refresh.setVisibility(View.GONE);

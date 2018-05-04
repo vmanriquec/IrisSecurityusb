@@ -32,7 +32,7 @@ public class BlueetoothConnectionService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Log.i(TAG, "onCreate");
+        Log.i(TAG, "onCreate creando las conexiones a dispositivos blotoo");
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
@@ -48,7 +48,7 @@ public class BlueetoothConnectionService extends Service {
         }
 
     }
-
+/*hilo de comunicacion asincrona con el dispositivo blotoo*/
     private class CommunicationThread extends AsyncTask<Void, Void, Void> {
 
         private BluetoothSocket mmSocket;

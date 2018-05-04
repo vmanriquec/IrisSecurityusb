@@ -1,6 +1,5 @@
 package com.apolomultimedia.guardify;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,21 +7,23 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.os.ParcelUuid;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.apolomultimedia.guardify.fragment.track.media.Galeria;
+import com.apolomultimedia.guardify.fragment.track.media.Recursos_local;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.util.AlertDialogs;
+import com.apolomultimedia.guardify.util.Constantes;
 import com.apolomultimedia.guardify.util.Main;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Locale;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -59,13 +60,14 @@ public class SplashActivity extends AppCompatActivity {
         startHandler();
 
     }
-
+    /* esperamos un tiempo*/
     private void startHandler() {
         handler.postDelayed(loopSplash, 2500);
 
     }
 
     Runnable loopSplash = new Runnable() {
+        /* creamos un hilo*/
         @Override
         public void run() {
 
@@ -82,7 +84,7 @@ public class SplashActivity extends AppCompatActivity {
                         registerBG();
                     } else {
                         Log.i(TAG, "regId: " + regId);
-                        continueSplash();
+                        permissionFineLocation();
                     }
 
                 } else {
@@ -94,6 +96,61 @@ public class SplashActivity extends AppCompatActivity {
 
         }
     };
+/*verificando permisos que el usuario ha dado a la aplicacion*/
+    private void permissionFineLocation() {
+        if (ContextCompat.checkSelfPermission(SplashActivity.this,android.Manifest.permission.ACCESS_FINE_LOCATION)
+                !=
+                PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(SplashActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    Constantes.PERMISSION_FINE_LOCATION);
+
+        } else {
+            permissionCoarseLocation();
+        }
+    }
+
+    private void permissionCoarseLocation() {
+        if (ContextCompat.checkSelfPermission(SplashActivity.this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(SplashActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                    Constantes.PERMISSION_COARSE_LOCATION);
+
+        } else {
+            continueSplash();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constantes.PERMISSION_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    permissionFineLocation();
+                } else {
+                    finish();
+
+                }
+                return;
+            }
+
+            case Constantes.PERMISSION_COARSE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    continueSplash();
+                } else {
+                    finish();
+                }
+                return;
+            }
+
+        }
+    }
 
     private void registerBG() {
         new AsyncTask<Object, Void, String>() {
@@ -108,7 +165,7 @@ public class SplashActivity extends AppCompatActivity {
                     msg = "Device registered, registration ID: " + regId;
 
                     storeRegistrationId(SplashActivity.this, regId);
-                    continueSplash();
+                    permissionFineLocation();
                     Log.i(TAG, msg);
                 } catch (Exception ex) {
                     msg = "Error :" + ex.getMessage();
@@ -174,7 +231,7 @@ public class SplashActivity extends AppCompatActivity {
             throw new RuntimeException("Could not get package name: " + e);
         }
     }
-
+/*verificar si estan disponibles los servicios de google en este equipo o si los soporta*/
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {

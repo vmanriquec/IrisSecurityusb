@@ -5,8 +5,14 @@ public class Constantes {
     public static final String SERVER = "http://apolomultimedia-server1.info/android_j";
     public static final String SOCKET_SERVER = "http://64.37.54.112:9000";
 
+    /*public static final String SERVER = "http://192.168.1.117/iris-security";
+    public static final String SOCKET_SERVER = "http://192.168.1.117:9000";*/
+
     public static final String API_PATH = SERVER + "/api/";
     public static final String IMAGES_PATH = SERVER + "/images/";
+    public static final String Imagenes_ruta_local="/Guardify/Fotos/";
+    public static final String Imagenes_ruta_local_audio="/Guardify/audio/";
+    public static final String Imagenes_ruta_local_video="/Guardify/Videos/";
 
     // api rest
     public static final String LOGIN = "userLogin.php";
@@ -38,5 +44,9 @@ public class Constantes {
     public static final String SUBOPT_FIRST = "first";
     public static final String SUBOPT_SECOND = "second";
     public static final String SUBOPT_THIRD = "third";
+
+
+    public static final int PERMISSION_FINE_LOCATION = 0;
+    public static final int PERMISSION_COARSE_LOCATION = 1;
 
 }

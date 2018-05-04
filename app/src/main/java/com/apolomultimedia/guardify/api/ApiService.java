@@ -3,11 +3,9 @@ package com.apolomultimedia.guardify.api;
 import com.apolomultimedia.guardify.api.model.CheckStatusModel;
 import com.apolomultimedia.guardify.api.model.ContactModel;
 import com.apolomultimedia.guardify.api.model.StatusModel;
-import com.apolomultimedia.guardify.api.model.UpdatePhotoModel;
 import com.apolomultimedia.guardify.api.model.UploadPhotoModel;
 import com.apolomultimedia.guardify.api.model.UserModel;
 import com.apolomultimedia.guardify.util.Constantes;
-import com.google.android.gms.common.api.Status;
 
 import java.util.Map;
 
@@ -19,10 +17,14 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
 
 public interface ApiService {
 
+    /*retrofit codifica las peticiones post get
+    *
+    *  public static final String LOGIN = "userLogin.php";
+    * en la linea de abajo simplifica el envio post
+    * */
     @FormUrlEncoded
     @POST(Constantes.LOGIN)
     Call<UserModel> getLogin(@FieldMap Map<String, String> params);

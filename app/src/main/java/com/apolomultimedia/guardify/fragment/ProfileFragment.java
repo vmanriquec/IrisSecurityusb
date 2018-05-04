@@ -177,9 +177,11 @@ public class ProfileFragment extends Fragment {
                     Uri uriPhoto = data.getData();
                     URI_FOTO = uriPhoto.toString();
                     //GuardifyApplication.imageLoader.displayImage(URI_FOTO, iv_foto);
+
                     File file = new File(getRealPathFromUri(getActivity(), Uri.parse(URI_FOTO)));
                     Picasso.with(getActivity()).load(file).transform(new CircleTransform())
                             .into(iv_foto);
+
                 }
 
                 break;
@@ -211,6 +213,7 @@ public class ProfileFragment extends Fragment {
             hashMap.put("birthday", birthday);
             hashMap.put("country", country);
 
+            Main.hideKeyboard(getActivity());
             initLoading(getActivity().getResources().getString(R.string.updating));
 
             ApiSingleton.getApiService().doUpdateProfile(hashMap).enqueue(new Callback<UserModel>() {
@@ -298,6 +301,7 @@ public class ProfileFragment extends Fragment {
         userPrefs.setKeyCiudad(tv_country.getText().toString().trim());
         userPrefs.setKeyOnomastico(tv_birthday.getText().toString().trim());
 
+        loadUser();
         loadUserDetails();
         ((MainActivity) getActivity()).loadUser();
 

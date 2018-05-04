@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.apolomultimedia.guardify.preference.BluePrefs;
 import com.apolomultimedia.guardify.preference.UserPrefs;
 import com.apolomultimedia.guardify.util.Main;
 
@@ -19,6 +20,7 @@ public class TrackingGPSService extends Service {
 
     Handler handler;
     UserPrefs userPrefs;
+    BluePrefs bluePrefs;
 
     @Override
     public void onCreate() {
@@ -26,18 +28,19 @@ public class TrackingGPSService extends Service {
 
         handler = new Handler();
         userPrefs = new UserPrefs(this);
+        bluePrefs = new BluePrefs(this);
 
     }
 
     Runnable runSendCoords = new Runnable() {
         @Override
         public void run() {
-
-            Log.i(TAG, "runSendCoords");
-
             String battery = String.valueOf(Main.getBatteryLevel(TrackingGPSService.this));
-            userPrefs.setKeyBatery(battery);
+            Log.i(TAG, "enviando coordenadas de latitud y longitud" );
 
+
+            userPrefs.setKeyBatery(battery);
+/*envia informacion de latitud y longitud a travez de socket parserando a json*/
             if (SocketService.mSocket != null && userPrefs.getKeySocketConnected()) {
                 JSONObject json = new JSONObject();
                 try {
@@ -45,7 +48,9 @@ public class TrackingGPSService extends Service {
                     json.put("longitude", userPrefs.getKeyLongitud());
                     json.put("speed", userPrefs.getKeySpeed());
                     json.put("user_id", userPrefs.getKeyIdUsuario());
+                    json.put("suboption", bluePrefs.getKeySuboption());
                     json.put("batery", userPrefs.getKeyBatery());
+
                     SocketService.EmitData("save_track", json);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -54,6 +59,7 @@ public class TrackingGPSService extends Service {
             }
 
             handler.removeCallbacks(this);
+            /*espera 10 segundos para volver a enviar longitud y latitud al servidor*/
             handler.postDelayed(this, 10000);
         }
     };

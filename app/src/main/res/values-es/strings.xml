@@ -62,6 +62,19 @@
     <string name="one_click">1 clic</string>
     <string name="share_gps_tracking_first_contact">Compartir seguimiento GPS con \n el primer contacto</string>
     <string name="share_gps_tracking_contacts_selected">Compartir seguimiento GPS con \n los contactos seleccionados</string>
+    <string name="take_photo">Tomar Fotos</string>
+    <string name="Record_a_video">Grabar Video</string>
+    <string name="cancel_Video">Cancelar Camara/Video</string>
+    <string name="Photo_gallery">Galeria de Fotos</string>
+
+    <string name="audio_recording">Iniciar Grabacion de Audio</string>
+    <string name="stop_recording">Parar Grabacion</string>
+    <string name="cancel_recording">Cancelar Grabacion</string>
+    <string name="Playing_audio">Reproducioendo audio</string>
+    <string name="play">Reproducir</string>
+    <string name="deleted">Eliminar</string>
+    <string name="exit">Salir</string>
+
     <string name="two_click">2 clics</string>
     <string name="share_gps_tracking_contacts_and_facebook">Compartir seguimiento GPS con todos \n los contactos, y
     publicar en Facebook</string>
@@ -85,4 +98,5 @@
     <string name="deleting">Eliminando</string>
     <string name="must_complete_firstname">Debes indicar tu nombre</string>
     <string name="date_updated">Datos actualizados</string>
+    <string name="test_string">string de prueba</string>
 </resources>

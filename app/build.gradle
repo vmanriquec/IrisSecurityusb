@@ -4,6 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
+
     defaultConfig {
         applicationId "com.apolomultimedia.guardify"
         minSdkVersion 15
@@ -31,7 +32,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.8.6.0'
     compile 'com.google.android.gms:play-services-location:9.0.0'
     compile 'com.google.android.gms:play-services-maps:9.0.0'
-    compile "com.google.android.gms:play-services-gcm:9.0.0"
+    compile 'com.google.android.gms:play-services-gcm:9.0.0'
     compile 'com.github.nkzawa:socket.io-client:0.3.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -41,4 +42,8 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.mukesh:countrypicker:1.1.4'
+    compile files('libs/httpclient-4.0.3.jar')
+    compile files('libs/httpmime-4.2.3.jar')
+
+    compile 'com.google.android.gms:play-services-appindexing:9.0.0'
 }

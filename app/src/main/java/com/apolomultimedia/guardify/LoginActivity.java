@@ -82,27 +82,30 @@ public class LoginActivity extends AppCompatActivity {
     private ContactDB contactDB;
 
     @Override
+    /* inicializamos la aplicacion*/
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+    /* instanciamos las clases usuario y contactos*/
         userPrefs = new UserPrefs(getApplicationContext());
         contactDB = new ContactDB(getApplicationContext());
         loadUnderline();
         getKeyHash();
 
     }
-
+    /* accion al loguearnos sin facebook */
     @OnClick(R.id.btn_login)
     void login() {
 
         String email = et_email.getText().toString().trim();
         String password = et_password.getText().toString().trim();
-
+ /* verificamos caracteres validos*/
         if (email.length() > 2 && password.length() > 0) {
             if (Main.isEmailValid(email)) {
+                 /* ocultamos teclado*/
                 Main.hideKeyboard(LoginActivity.this);
                 doLoginRetrofit(email, password);
 
@@ -125,6 +128,24 @@ public class LoginActivity extends AppCompatActivity {
 
         initLoading(getString(R.string.validating));
 
+/*retrofit codifica las peticiones post get
+    *
+    *  public static final String LOGIN = "userLogin.php";
+    *
+    * en la linea de abajo simplifica el envio post
+    *
+    *
+    *
+    *
+    *
+    *
+    * @FormUrlEncoded
+    @POST(Constantes.LOGIN)
+    Call<UserModel> getLogin(@FieldMap Map<String, String> params);
+
+    * para luego llamarlo y pasarle los datos desde el objeto UserModel
+    * mandandolos a login.php
+    * */
         ApiSingleton.getApiService().getLogin(hashMap).enqueue(new Callback<UserModel>() {
             @Override
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -158,11 +179,15 @@ public class LoginActivity extends AppCompatActivity {
         } catch (Throwable e) {
             e.printStackTrace();
         }
+          /* obtener credenciales de facebook*/
         getFacebookCredentials();
 
     }
 
     private static CallbackManager callbackManager;
+
+
+    /* capturamos datos devueltos  de facebook*/
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
@@ -173,8 +198,9 @@ public class LoginActivity extends AppCompatActivity {
                     new GraphRequest.GraphJSONObjectCallback() {
                         @Override
                         public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
-                            Log.i(TAG, graphResponse.getJSONObject().toString());
+                            Log.i(TAG, graphResponse.getJSONObject().toString()+"datos capturados desde faceboooook para guardar");
                             try {
+                                  /* parseamos json*/
                                 JSONObject json = graphResponse.getJSONObject();
                                 String id = json.getString("id");
                                 String email = json.getString("email");
@@ -245,9 +271,10 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this,
                 Arrays.asList("public_profile, email, user_friends"));
+          /* guardamos los datos traidos al objeto loginresult*/
         LoginManager.getInstance().registerCallback(callbackManager, mCallback);
     }
-
+    /* guardar usuario nuevo y continuar*/
     private void saveUserAndContinue(UserModel model) {
         userPrefs.setKeyLogged(true);
         userPrefs.setKeyIdusuario(model.getIdUsuario());
@@ -294,6 +321,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /* registramos datos en sqlite normal*/
     private void doRegisterRetrofit(String email, String password, String first_name,
                                     String last_name) {
 
@@ -313,7 +341,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (success) {
                     userPrefs.setKeyLoadFotoFb(false);
                     saveUserAndContinue(response.body());
-
+/* guarda y nos envia al main activity por intens para levantar la aplicacion */
                 } else {
                     ToastUtil.shortToast(LoginActivity.this, response.body().getMessage());
 
@@ -331,11 +359,14 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.tv_create)
     void create_acc() {
+          /* ocultamos vistas de linear layout de acceso  normal o con facebook*/
         tv_create.setVisibility(View.GONE);
         ll_login.setVisibility(View.GONE);
+        /* hacemos visible layout de registro normal*/
         ll_register.setVisibility(View.VISIBLE);
     }
 
+    /* capturamos y  guardamos datos de usuario normal*/
     @OnClick(R.id.btn_register)
     void register() {
         String email = et_email_register.getText().toString().trim();

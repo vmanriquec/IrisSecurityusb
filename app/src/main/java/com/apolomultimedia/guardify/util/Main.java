@@ -23,14 +23,14 @@ import java.util.regex.Pattern;
  * Created by developer on 20/06/2016.
  */
 public class Main {
-
+/*metodo CHEKA EL ESTADO DE LA CONEXION*/
     public static boolean hasConnecion(Context context) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
     }
-
+/*metodo cheka estado del gps*/
     public static boolean hasGPSEnabled(Context context) {
         final LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -44,18 +44,18 @@ public class Main {
                 .getSystemService(activity.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(
                 PowerManager.ACQUIRE_CAUSES_WAKEUP
-                        | PowerManager.FULL_WAKE_LOCK, "Taxitel");
+                        | PowerManager.FULL_WAKE_LOCK, "");
         wl.acquire();
         wl.release();
     }
-
+/* metodo oculta el teclado*/
     public static void hideKeyboard(Activity context) {
         if (context.getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(context.getCurrentFocus().getWindowToken(), 0);
         }
     }
-
+    /* validacion correcta de un email*/
     public static boolean isEmailValid(String email) {
         boolean isValid = false;
 
@@ -69,7 +69,7 @@ public class Main {
         }
         return isValid;
     }
-
+/*metodo cheka estado de la bateria*/
     public static float getBatteryLevel(Context context) {
         Intent batteryIntent = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
@@ -97,6 +97,7 @@ public class Main {
             switch (suboption) {
                 case Constantes.SUBOPT_FIRST:
                     context.startService(new Intent(context, TrackingGPSService.class));
+                    sendNotification(context);
                     break;
 
                 case Constantes.SUBOPT_SECOND:
@@ -115,6 +116,12 @@ public class Main {
         if (finish_socket) {
             context.stopService(new Intent(context, SocketService.class));
         }
+
+    }
+
+    private static void sendNotification(Context context) {
+        // webservice PHP enviar notificacion a sus contactos ..
+
 
     }
 
